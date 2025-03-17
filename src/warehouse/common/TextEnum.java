@@ -1,4 +1,4 @@
-package common;
+package warehouse.common;
 
 public enum TextEnum {
 
