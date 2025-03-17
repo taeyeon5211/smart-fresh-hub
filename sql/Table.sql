@@ -66,29 +66,28 @@ CREATE TABLE product (
 -- 입고 테이블
 CREATE TABLE inbound_table (
                                inbound_id INT AUTO_INCREMENT PRIMARY KEY, -- 입고 ID
-                               inbound_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 입고 날짜
-                               inbound_request_date TIMESTAMP, -- 입고 요청 날짜
-                               inbound_status enum('승인','취소','대기') NOT NULL, -- 입고 상태
-                               admin_id INT NOT NULL, -- 담당 관리자 ID (참조)
+                               inbound_date TIMESTAMP, -- 입고 날짜
+                               inbound_request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 입고 요청 날짜
+                               inbound_status enum('승인','취소','대기') default '대기', -- 입고 상태
+                               admin_id INT, -- 담당 관리자 ID (참조)
                                inbound_amount INT NOT NULL, -- 입고 수량
                                product_id INT NOT NULL, -- 제품 ID (참조)
                                business_id INT NOT NULL -- 사업체 ID (참조)
 );
-
+-- 입고 날짜 null 가능, 입고 요청 날짜 default current_timestamp, 입고상태 default '대기', admin_id null 가능 으로 변경
 
 -- 출고 테이블
 CREATE TABLE outbound_table (
                                 outbound_id INT AUTO_INCREMENT PRIMARY KEY, -- 출고 ID
-                                outbound_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 출고 날짜
-                                outbound_request_date TIMESTAMP, -- 출고 요청 날짜
-                                outbound_status ENUM('승인', '대기','취소') NOT NULL, -- 출고 상태
-                                admin_id INT NOT NULL, -- 담당 관리자 ID (참조)
+                                outbound_date TIMESTAMP, -- 출고 날짜
+                                outbound_request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 출고 요청 날짜
+                                outbound_status ENUM('승인', '대기','취소') default '대기', -- 출고 상태
+                                admin_id INT, -- 담당 관리자 ID (참조)
                                 outbound_amount INT NOT NULL, -- 출고 수량
                                 product_id INT NOT NULL, -- 제품 ID (참조)
                                 business_id INT NOT NULL -- 사업체 ID (참조)
 );
-
-
+-- outbound table도 동일하게 변경
 
 -- 창고 테이블
 CREATE TABLE warehouse_table (
