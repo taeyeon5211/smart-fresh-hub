@@ -1,4 +1,6 @@
+
 use wms_db;
+
 -- 로그인 기록 FK
 ALTER TABLE login_h_table
     ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
