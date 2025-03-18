@@ -14,13 +14,13 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InboundVo {
-    private int inboundId;
-    private int productId;
-    private int inboundAmount;
-    private String status; // 승인, 대기, 취소
-    private LocalDateTime requestDate;
-    private LocalDateTime inboundDate;
-    private int adminId;
+    private int inboundId;          // 입고 ID
+    private int productId;          // 제품 ID
+    private int inboundAmount;      // 입고 수량
+    private String status;          // 입고 상태 (승인, 대기, 취소)
+    private LocalDateTime requestDate; // 입고 요청 날짜
+    private LocalDateTime inboundDate; // 실제 입고 날짜
+    private int adminId;            // 담당 관리자 ID
 
     @Override
     public boolean equals(Object o) {
