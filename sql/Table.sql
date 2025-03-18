@@ -180,4 +180,3 @@ ALTER TABLE revenue_table
 ALTER TABLE revenue_history_table
     ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
 
-
