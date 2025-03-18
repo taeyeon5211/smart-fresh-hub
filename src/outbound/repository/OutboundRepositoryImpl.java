@@ -115,8 +115,6 @@ public class OutboundRepositoryImpl implements OutboundRepository{
         }
     }
 
-    public
-
     public static void main(String[] args) {
         OutboundRepositoryImpl outboundRepository = new OutboundRepositoryImpl();
 //        OutboundDTO outboundDTO0 = new OutboundDTO().builder().outboundAmount(100).productId(1).build();
