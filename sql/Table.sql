@@ -1,6 +1,25 @@
 
 USE wms_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS revenue_history_table;
+DROP TABLE IF EXISTS revenue_table;
+DROP TABLE IF EXISTS outbound_table;
+DROP TABLE IF EXISTS inbound_table;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS c_mid_level;
+DROP TABLE IF EXISTS category_main;
+DROP TABLE IF EXISTS business_table;
+DROP TABLE IF EXISTS admin_table;
+DROP TABLE IF EXISTS login_h_table;
+DROP TABLE IF EXISTS user_table;
+DROP TABLE IF EXISTS area_table;
+DROP TABLE IF EXISTS warehouse_table;
+DROP TABLE IF EXISTS storage_condition;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- 유저 테이블
 CREATE TABLE user_table (
                             user_id INT AUTO_INCREMENT PRIMARY KEY, -- 사용자 ID (고유값)
@@ -60,6 +79,7 @@ CREATE TABLE product (
                          category_mid_id INT NOT NULL, -- 중분류 ID (참조)
                          storage_temperature INT, -- 보관 온도
                          expiration_date DATE, -- 유통기한
+                         business_id INT NOT NULL,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 제품 등록 날짜 (자동 기록)
 );
 
@@ -71,8 +91,7 @@ CREATE TABLE inbound_table (
                                inbound_status enum('승인','취소','대기') default '대기', -- 입고 상태
                                admin_id INT, -- 담당 관리자 ID (참조)
                                inbound_amount INT NOT NULL, -- 입고 수량
-                               product_id INT NOT NULL, -- 제품 ID (참조)
-                               business_id INT NOT NULL -- 사업체 ID (참조)
+                               product_id INT NOT NULL -- 제품 ID (참조)
 );
 -- 입고 날짜 null 가능, 입고 요청 날짜 default current_timestamp, 입고상태 default '대기', admin_id null 가능 으로 변경
 
@@ -84,8 +103,7 @@ CREATE TABLE outbound_table (
                                 outbound_status ENUM('승인', '대기','취소') default '대기', -- 출고 상태
                                 admin_id INT, -- 담당 관리자 ID (참조)
                                 outbound_amount INT NOT NULL, -- 출고 수량
-                                product_id INT NOT NULL, -- 제품 ID (참조)
-                                business_id INT NOT NULL -- 사업체 ID (참조)
+                                product_id INT NOT NULL -- 제품 ID (참조)
 );
 -- outbound table도 동일하게 변경
 
