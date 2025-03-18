@@ -1,3 +1,22 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS revenue_history_table;
+DROP TABLE IF EXISTS revenue_table;
+DROP TABLE IF EXISTS outbound_table;
+DROP TABLE IF EXISTS inbound_table;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS c_mid_level;
+DROP TABLE IF EXISTS category_main;
+DROP TABLE IF EXISTS business_table;
+DROP TABLE IF EXISTS admin_table;
+DROP TABLE IF EXISTS login_h_table;
+DROP TABLE IF EXISTS user_table;
+DROP TABLE IF EXISTS area_table;
+DROP TABLE IF EXISTS warehouse_table;
+DROP TABLE IF EXISTS storage_condition;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
 USE wms_db;
 
@@ -135,48 +154,46 @@ CREATE TABLE revenue_history_table (
 );
 
 
--- 로그인 기록 FK
-ALTER TABLE login_h_table
-    ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
+-- revenue_table에 목업 데이터 삽입 (각 area_id에 맞춰서 제품의 크기 합이 초과하지 않도록 조정)
+INSERT INTO revenue_table (revenue_amount, product_id, area_id)
+VALUES
+    (10, 1, 1),  -- Warehouse A, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 1),  -- Warehouse A, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 1),  -- Warehouse A, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
 
--- 관리자 FK
-ALTER TABLE admin_table
-    ADD CONSTRAINT fk_admin_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
+    (10, 4, 2),  -- Warehouse B, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 2),  -- Warehouse B, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 2),  -- Warehouse B, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
 
--- 사업체 FK
-ALTER TABLE business_table
-    ADD CONSTRAINT fk_business_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
+    (10, 7, 3),  -- Warehouse C, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 250)
+    (10, 8, 3),  -- Warehouse C, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 250)
+    (10, 9, 3),  -- Warehouse C, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 250)
 
--- 카테고리 FK
-ALTER TABLE c_mid_level
-    ADD CONSTRAINT fk_category_mid_main FOREIGN KEY (category_main_id) REFERENCES category_main(category_id) ON DELETE CASCADE;
+    (10, 1, 4),  -- Warehouse D, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 400)
+    (10, 2, 4),  -- Warehouse D, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 400)
+    (10, 3, 4),  -- Warehouse D, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 400)
 
--- 제품 FK
-ALTER TABLE product
-    ADD CONSTRAINT fk_product_category FOREIGN KEY (category_mid_id) REFERENCES c_mid_level(category_mid_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_product_business FOREIGN KEY (business_id) REFERENCES business_table(business_id) ON DELETE CASCADE;
+    (10, 4, 5),  -- Warehouse E, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 5),  -- Warehouse E, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 5),  -- Warehouse E, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
 
--- 입고 FK
-ALTER TABLE inbound_table
-    ADD CONSTRAINT fk_inbound_admin FOREIGN KEY (admin_id) REFERENCES admin_table(admin_id),
-    ADD CONSTRAINT fk_inbound_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE;
+    (10, 7, 6),  -- Warehouse F, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 200)
+    (10, 8, 6),  -- Warehouse F, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 200)
+    (10, 9, 6),  -- Warehouse F, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 200)
 
--- 출고 FK
-ALTER TABLE outbound_table
-    ADD CONSTRAINT fk_outbound_admin FOREIGN KEY (admin_id) REFERENCES admin_table(admin_id),
-    ADD CONSTRAINT fk_outbound_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE;
+    (10, 1, 7),  -- Warehouse G, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 300)
+    (10, 2, 7),  -- Warehouse G, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 300)
+    (10, 3, 7),  -- Warehouse G, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 300)
 
--- 창고 FK
-ALTER TABLE area_table
-    ADD CONSTRAINT fk_area_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouse_table(warehouse_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_area_storage FOREIGN KEY (storage_id) REFERENCES storage_condition(storage_id) ON DELETE SET NULL;
+    (10, 4, 8),  -- Warehouse H, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 250)
+    (10, 5, 8),  -- Warehouse H, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 250)
+    (10, 6, 8),  -- Warehouse H, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 250)
 
--- 재고 FK
-ALTER TABLE revenue_table
-    ADD CONSTRAINT fk_revenue_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_revenue_area FOREIGN KEY (area_id) REFERENCES area_table(area_id) ON DELETE CASCADE;
+    (10, 7, 9),  -- Warehouse I, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 300)
+    (10, 8, 9),  -- Warehouse I, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 300)
+    (10, 9, 9),  -- Warehouse I, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 300)
 
--- 재고 히스토리 FK
-ALTER TABLE revenue_history_table
-    ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
+    (10, 1, 10), -- Warehouse J, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 10), -- Warehouse J, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 10); -- Warehouse J, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
 
