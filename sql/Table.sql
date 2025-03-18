@@ -5,6 +5,7 @@ USE wms_db;
 CREATE TABLE user_table (
                             user_id INT AUTO_INCREMENT PRIMARY KEY,
                             user_login_id VARCHAR(50) NOT NULL UNIQUE,
+                            user_name VARCHAR(30) NOT NULL,
                             user_password VARCHAR(255) NOT NULL,
                             user_address VARCHAR(255),
                             user_email VARCHAR(100) UNIQUE,
