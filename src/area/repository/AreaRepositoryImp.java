@@ -110,6 +110,6 @@ public class AreaRepositoryImp implements AreaRepository {
         areaRepositoryImp.getSpaceGroupByWarehouse().orElse(new ArrayList<>()).forEach(System.out::println);
         areaRepositoryImp.getAreaAll().orElse(new ArrayList<>()).forEach(System.out::println);
         System.out.println("zz");
-        System.out.println(areaRepositoryImp.getUsedSpaceById(11));
+        System.out.println(areaRepositoryImp.getUsedSpaceById(10));
     }
 }
