@@ -1,14 +1,29 @@
+SET FOREIGN_KEY_CHECKS = 0;
 
-USE wms_db;
+DROP TABLE IF EXISTS revenue_history_table;
+DROP TABLE IF EXISTS revenue_table;
+DROP TABLE IF EXISTS outbound_table;
+DROP TABLE IF EXISTS inbound_table;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS c_mid_level;
+DROP TABLE IF EXISTS category_main;
+DROP TABLE IF EXISTS business_table;
+DROP TABLE IF EXISTS admin_table;
+DROP TABLE IF EXISTS login_h_table;
+DROP TABLE IF EXISTS user_table;
+DROP TABLE IF EXISTS area_table;
+DROP TABLE IF EXISTS warehouse_table;
+DROP TABLE IF EXISTS storage_condition;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 
 USE wms_db;
 
 -- 1. 유저 테이블
 CREATE TABLE user_table (
-
                             user_id INT AUTO_INCREMENT PRIMARY KEY,
                             user_login_id VARCHAR(50) NOT NULL UNIQUE,
-                            user_name VARCHAR(30) NOT NULL,
                             user_password VARCHAR(255) NOT NULL,
                             user_address VARCHAR(255),
                             user_email VARCHAR(100) UNIQUE,
@@ -16,6 +31,7 @@ CREATE TABLE user_table (
                             user_birth_date DATE,
                             user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             user_type ENUM('admin', 'client') NOT NULL
+);
 
 -- 2. 로그인 기록 테이블
 CREATE TABLE login_h_table (
@@ -138,163 +154,46 @@ CREATE TABLE revenue_history_table (
 );
 
 
--- 로그인 기록 FK
-ALTER TABLE login_h_table
-    ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
-
--- 관리자 FK
-ALTER TABLE admin_table
-    ADD CONSTRAINT fk_admin_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
-
--- 사업체 FK
-ALTER TABLE business_table
-    ADD CONSTRAINT fk_business_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
-
--- 카테고리 FK
-ALTER TABLE c_mid_level
-    ADD CONSTRAINT fk_category_mid_main FOREIGN KEY (category_main_id) REFERENCES category_main(category_id) ON DELETE CASCADE;
-
--- 제품 FK
-ALTER TABLE product
-    ADD CONSTRAINT fk_product_category FOREIGN KEY (category_mid_id) REFERENCES c_mid_level(category_mid_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_product_business FOREIGN KEY (business_id) REFERENCES business_table(business_id) ON DELETE CASCADE;
-
--- 입고 FK
-ALTER TABLE inbound_table
-    ADD CONSTRAINT fk_inbound_admin FOREIGN KEY (admin_id) REFERENCES admin_table(admin_id),
-    ADD CONSTRAINT fk_inbound_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE;
-
--- 출고 FK
-ALTER TABLE outbound_table
-    ADD CONSTRAINT fk_outbound_admin FOREIGN KEY (admin_id) REFERENCES admin_table(admin_id),
-    ADD CONSTRAINT fk_outbound_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE;
-
--- 창고 FK
-ALTER TABLE area_table
-    ADD CONSTRAINT fk_area_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouse_table(warehouse_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_area_storage FOREIGN KEY (storage_id) REFERENCES storage_condition(storage_id) ON DELETE SET NULL;
-
--- 재고 FK
-ALTER TABLE revenue_table
-    ADD CONSTRAINT fk_revenue_product FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_revenue_area FOREIGN KEY (area_id) REFERENCES area_table(area_id) ON DELETE CASCADE;
-
--- 재고 히스토리 FK
-ALTER TABLE revenue_history_table
-    ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
-
-
-
-
-
-use wms_db;
--- 창고 데이터 삽입
-select * from storage_condition;
-INSERT INTO warehouse_table (warehouse_name, warehouse_space, warehouse_address, warehouse_amount)
+-- revenue_table에 목업 데이터 삽입 (각 area_id에 맞춰서 제품의 크기 합이 초과하지 않도록 조정)
+INSERT INTO revenue_table (revenue_amount, product_id, area_id)
 VALUES
-    ('Central Warehouse', 500, '123 Main St, City', 10000),
-    ('East Warehouse', 800, '456 East Ave, City', 15000),
-    ('West Warehouse', 600, '789 West Rd, City', 12000);
+    (10, 1, 1),  -- Warehouse A, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 1),  -- Warehouse A, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 1),  -- Warehouse A, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
 
-INSERT INTO storage_condition (storage_name, min_temp, max_temp, description)
-VALUES
-    ('Ultra-Low_Temp', -60, -18, '초저온 보관: 백신, 특수 의약품 및 일부 연구 샘플 보관'),
-    ('Frozen_Storage', -18, -10, '냉동 보관: 육류, 해산물, 냉동 식품 및 장기 보관용 식품'),
-    ('Refrigerated_Storage', 0, 4, '냉장 보관: 유제품, 신선 식품, 일부 의약품 및 과일'),
-    ('Cool_Storage', 5, 9, '저온 보관: 일부 과일 및 채소, 와인, 특수 식품 보관'),
-    ('Room_Temperature', 10, 25, '상온 보관: 일반 식품, 건조 식품, 음료 및 공산품'),
-    ('Heated_Storage', 40, 65, '냉온장 보관: 따뜻한 상태 유지가 필요한 식품 및 특수 물품');
+    (10, 4, 2),  -- Warehouse B, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 2),  -- Warehouse B, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 2),  -- Warehouse B, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
 
--- 구역 데이터 삽입 (창고 공간보다 작게 설정)
-INSERT INTO area_table (area_space, area_code, area_price, warehouse_id, storage_id)
-VALUES
--- Central Warehouse (500m² 이하)
-(150, 'A', 50, 1, NULL),
-(200, 'B', 60, 1, 2),
-(100, 'C', 55, 1, NULL),
+    (10, 7, 3),  -- Warehouse C, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 250)
+    (10, 8, 3),  -- Warehouse C, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 250)
+    (10, 9, 3),  -- Warehouse C, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 250)
 
--- East Warehouse (800m² 이하)
-(300, 'A', 70, 2, 3),
-(250, 'B', 80, 2, NULL),
-(150, 'C', 75, 2, 1),
+    (10, 1, 4),  -- Warehouse D, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 400)
+    (10, 2, 4),  -- Warehouse D, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 400)
+    (10, 3, 4),  -- Warehouse D, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 400)
 
--- West Warehouse (600m² 이하)
-(200, 'A', 65, 3, NULL),
-(250, 'B', 70, 3, 4),
-(100, 'C', 60, 3, NULL);
+    (10, 4, 5),  -- Warehouse E, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 5),  -- Warehouse E, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 5),  -- Warehouse E, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
 
-INSERT INTO user_table (user_login_id, user_password, user_address, user_email, user_phone, user_birth_date, user_type)
-VALUES
-    ('johndoe', 'password123', '1234 Elm Street, City, Country', 'johndoe@example.com', '010-1234-5678', '1990-05-15', 'client'),
-    ('adminuser', 'adminpassword', '5678 Oak Avenue, City, Country', 'admin@example.com', '010-2345-6789', '1985-11-25', 'admin'),
-    ('alicebrown', 'alicepass2023', '7890 Pine Road, City, Country', 'alicebrown@example.com', '010-3456-7890', '1992-08-30', 'client'),
-    ('bobsmith', 'bobpassword456', '1234 Maple Lane, City, Country', 'bobsmith@example.com', '010-4567-8901', '1988-03-20', 'client'),
-    ('charliewhite', 'charliepass789', '5678 Birch Boulevard, City, Country', 'charliewhite@example.com', '010-5678-9012', '1995-12-10', 'client');
+    (10, 7, 6),  -- Warehouse F, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 200)
+    (10, 8, 6),  -- Warehouse F, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 200)
+    (10, 9, 6),  -- Warehouse F, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 200)
 
-INSERT INTO business_table (business_regist_num, business_name, business_address, user_id)
-VALUES
-    ('123-45-67890', 'Tech Innovators', '4567 Tech Park, Silicon Valley, USA', 1),
-    ('234-56-78901', 'Green Solutions', '7890 Green Street, City, Country', 2),
-    ('345-67-89012', 'HealthCare Pro', '1234 Wellness Road, City, Country', 3),
-    ('456-78-90123', 'Foodie Haven', '5678 Culinary Blvd, City, Country', 4),
-    ('567-89-01234', 'Home Essentials', '9102 Home St, City, Country', 5);
+    (10, 1, 7),  -- Warehouse G, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 300)
+    (10, 2, 7),  -- Warehouse G, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 300)
+    (10, 3, 7),  -- Warehouse G, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 300)
 
-INSERT INTO category_main (category_name)
-VALUES
-    ('Fruits'),
-    ('Vegetables');
+    (10, 4, 8),  -- Warehouse H, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 250)
+    (10, 5, 8),  -- Warehouse H, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 250)
+    (10, 6, 8),  -- Warehouse H, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 250)
 
-INSERT INTO c_mid_level (category_name, category_main_id)
-VALUES
-    ('Citrus', 1),    -- 'Fruits' 대분류의 중분류
-    ('Berries', 1),   -- 'Fruits' 대분류의 중분류
-    ('Tropical Fruits', 1),  -- 'Fruits' 대분류의 중분류
-    ('Leafy Greens', 2),     -- 'Vegetables' 대분류의 중분류
-    ('Root Vegetables', 2);  -- 'Vegetables' 대분류의 중분류
+    (10, 7, 9),  -- Warehouse I, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 300)
+    (10, 8, 9),  -- Warehouse I, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 300)
+    (10, 9, 9),  -- Warehouse I, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 300)
 
-INSERT INTO product (product_size, product_name, category_mid_id, storage_temperature, expiration_date, business_id)
-VALUES
-    (5, 'Orange', 1, 5, '2025-12-31', 1),  -- 'Citrus' 중분류, 사업체 1번
-    (8, 'Strawberry', 2, 4, '2025-06-30', 2),  -- 'Berries' 중분류, 사업체 2번
-    (7, 'Mango', 3, 10, '2025-08-20', 3),  -- 'Tropical Fruits' 중분류, 사업체 3번
-    (6, 'Spinach', 4, 2, '2025-07-15', 4),  -- 'Leafy Greens' 중분류, 사업체 4번
-    (9, 'Carrot', 5, 0, '2025-11-10', 5);  -- 'Root Vegetables' 중분류, 사업체 5번
+    (10, 1, 10), -- Warehouse J, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 10), -- Warehouse J, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 10); -- Warehouse J, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
 
-select * from area_table;
-select * from product;
-
--- autoincrement 에 맞게 productid, area_id 수정,
-insert into revenue_table (revenue_amount, product_id, area_id) VALUES
-(5,6,10),
-(10,8,11),
-(5,8,13),
-(5,9,13);
-
-INSERT INTO user_table (user_login_id, user_password, user_address, user_email, user_phone, user_birth_date, user_type)
-VALUES
-    ('admin1', 'password1', 'Seoul', 'admin1@example.com', '010-1111-1111', '1985-01-01', 'admin'),
-    ('admin2', 'password2', 'Busan', 'admin2@example.com', '010-2222-2222', '1986-02-02', 'admin'),
-    ('admin3', 'password3', 'Incheon', 'admin3@example.com', '010-3333-3333', '1987-03-03', 'admin'),
-    ('admin4', 'password4', 'Daegu', 'admin4@example.com', '010-4444-4444', '1988-04-04', 'admin'),
-    ('admin5', 'password5', 'Daejeon', 'admin5@example.com', '010-5555-5555', '1989-05-05', 'admin');
-
-INSERT INTO admin_table (admin_hire_date, admin_position, user_id)
-VALUES
-    ('2020-01-01', 'Manager', 6),
-    ('2020-02-01', 'Senior Manager', 7),
-    ('2020-03-01', 'Supervisor', 8),
-    ('2020-04-01', 'Assistant', 9),
-    ('2020-05-01', 'Clerk', 10);
-
-INSERT INTO inbound_table (inbound_date, inbound_request_date, inbound_status, admin_id, inbound_amount, product_id)
-VALUES
-    (NOW(), NOW(), '대기', 1, 100, 6),
-    (NOW(), NOW(), '승인', 2, 150, 7),
-    (NOW(), NOW(), '취소', 3, 200, 8),
-    (NOW(), NOW(), '대기', 4, 250, 9),
-    (NOW(), NOW(), '승인', 5, 300, 6),
-    (NOW(), NOW(), '취소', 1, 120, 7),
-    (NOW(), NOW(), '대기', 2, 180, 8),
-    (NOW(), NOW(), '승인', 3, 220, 9),
-    (NOW(), NOW(), '취소', 4, 260, 6),
-    (NOW(), NOW(), '대기', 5, 310, 7);
