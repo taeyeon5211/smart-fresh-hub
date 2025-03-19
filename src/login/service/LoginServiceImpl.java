@@ -13,6 +13,12 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
+    /**
+     * 사용자 정보를 입력받아 dto 객체로 만들고, 객체를 repo로 넘기는 메서드
+     * @param loginId
+     * @param password
+     * @return LoginReqDTO
+     */
     @Override
     public LoginReqDTO authLogin(String loginId, String password) {
         // 받은 정보를 디티오로 만들기
@@ -29,13 +35,4 @@ public class LoginServiceImpl implements LoginService {
         return loginReqDTO;
     }
 
-    /**
-     * 로그인 시도시 로그인 시도 테이블에 기록하기
-     * @param loginId
-     * @param password
-     */
-    @Override
-    public void recordAuthAttempt(String loginId, String password) {
-        // auth Login 에서 만든 디티오를 받아서, 받은 디티오를 레포로 넘긴다.
-    }
 }

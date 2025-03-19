@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LoginRepoImpl implements LoginRepo {
-    //private LoginCont loginCont;
     Connection connection = ObjectIo.getConnection();
     CallableStatement cs = null;
     ResultSet rs = null;

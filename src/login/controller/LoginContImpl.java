@@ -22,7 +22,6 @@ public class LoginContImpl implements LoginCont{
         System.out.print("비밀번호를 입력하세요: ");
         String password = sc.next();
 
-        loginService.authLogin(loginId, password);// 엔터 누를 시 사용자 입력값을 받아 서비스로 넘기기
     }
 
 
