@@ -162,6 +162,9 @@ select distinct r.revenue_amount, o.outbound_id, o.outbound_amount, p.business_i
     JOIN outbound_table o ON o.product_id = p.product_id
 WHERE o.outbound_status = '승인';
 
+select * from revenue_table;
+delete from revenue_table where revenue_amount = 0;
+
 select * from outbound_table where outbound_status = '대기';
 update outbound_table set outbound_status = '승인' where outbound_id = 1;
 select * from revenue_history_table;
