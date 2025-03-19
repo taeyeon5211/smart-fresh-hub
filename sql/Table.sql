@@ -33,13 +33,6 @@ CREATE TABLE user_table (
                             user_type ENUM('admin', 'client') NOT NULL
 );
 
--- 2. 로그인 기록 테이블
-CREATE TABLE login_h_table (
-                               login_h_id INT AUTO_INCREMENT PRIMARY KEY,
-                               login_h_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-                               login_h_logout_time DATETIME,
-                               user_id INT NOT NULL
-);
 
 -- 3. 관리자 테이블
 CREATE TABLE admin_table (
@@ -196,4 +189,3 @@ VALUES
     (10, 1, 10), -- Warehouse J, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
     (10, 2, 10), -- Warehouse J, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
     (10, 3, 10); -- Warehouse J, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
-

@@ -68,33 +68,46 @@ delimiter ;
 
 
 -- 회원 업데이트 프로시저
-delimiter $$
+
+drop procedure if exists UpdateUser;
+DELIMITER $$
 
 CREATE PROCEDURE UpdateUser(
     IN p_user_login_id VARCHAR(50),
-    IN p_user_name VARCHAR(30),
-    IN p_user_password VARCHAR(255), -- 나중에 해싱하여 디비에 저장하기
-    IN p_user_address VARCHAR(255),
-    IN p_user_email VARCHAR(100),
-    IN p_user_phone VARCHAR(20),
-    IN p_user_birth_date DATE,
-    IN p_user_type ENUM ('admin', 'client')
+    IN p_update_type INT,
+    IN p_new_value VARCHAR(255)
 )
 BEGIN
+    -- 업데이트 타입에 따라 다른 컬럼을 변경
+    IF p_update_type = 1 THEN
+        UPDATE user_table SET user_password = p_new_value WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 2 THEN
+        UPDATE user_table SET user_address = p_new_value WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 3 THEN
+        UPDATE user_table SET user_name = p_new_value WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 4 THEN
+        UPDATE user_table SET user_email = p_new_value WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 5 THEN
+        UPDATE user_table SET user_phone = p_new_value WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 6 THEN
+        UPDATE user_table SET user_birth_date = STR_TO_DATE(p_new_value, '%Y-%m-%d') WHERE user_login_id = p_user_login_id;
+    ELSEIF p_update_type = 7 THEN
+        UPDATE user_table SET user_type = p_new_value WHERE user_login_id = p_user_login_id;
 
-    UPDATE user_table
-    SET user_name       = p_user_name,
-        user_password   = p_user_password,
-        user_address    = p_user_address,
-        user_email      = p_user_email,
-        user_phone      = p_user_phone,
-        user_birth_date = p_user_birth_date,
-        user_type       = p_user_type
-    WHERE user_login_id = p_user_login_id;
-end $$
-delimiter ;
+    END IF;
+END $$
 
-drop procedure UpdateUser;
+DELIMITER ;
 
-select *
-from user_table;
+
+-- 회원이 삭제될때 backup_deleted_user에 기록하기
+CREATE TRIGGER backup_deleted_user
+    BEFORE DELETE
+    ON user_table
+    FOR EACH ROW
+BEGIN
+    INSERT INTO user_backup_table (user_id, user_login_id, user_name, user_password, user_address,
+                                   user_email, user_phone, user_birth_date, user_created_at, user_type, deleted_at)
+    VALUES (OLD.user_id, OLD.user_login_id, OLD.user_name, OLD.user_password, OLD.user_address,
+            OLD.user_email, OLD.user_phone, OLD.user_birth_date, OLD.user_created_at, OLD.user_type, NOW());
+END;
