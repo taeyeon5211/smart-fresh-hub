@@ -11,4 +11,6 @@ public interface AreaRepository {
     Optional<List<AreaUsedSpaceDto>> getSpaceGroupByWarehouse();
     Optional<List<AreaDto>> getAreaAll();
     Optional<ProductUsedSpaceDto> getUsedSpaceById(int areaId);
+    void UpdateAreaTemp(AreaDto areaDto);
+    void CreateArea(AreaDto areaDto);
 }

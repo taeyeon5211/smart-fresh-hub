@@ -118,11 +118,13 @@ CREATE TABLE warehouse_table (
 CREATE TABLE area_table (
                             area_id INT AUTO_INCREMENT PRIMARY KEY,
                             area_space INT NOT NULL,
-                            area_code CHAR(1) NOT NULL,
+                            area_code VARCHAR(50) NOT NULL,
                             area_price INT NOT NULL,
                             warehouse_id INT NOT NULL,
                             storage_id INT
 );
+
+alter table area_table modify column area_code varchar(50) not null;
 
 -- 12. 보관 상태 테이블
 CREATE TABLE storage_condition (
