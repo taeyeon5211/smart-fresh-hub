@@ -15,14 +15,15 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class InboundHistoryVo {
-    private final int inboundId;
-    private final LocalDateTime inboundRequestDate;
-    private final LocalDateTime inboundDate;
-    private final String inboundStatus;
-    private final int inboundAmount;
-    private final String productName;
-    private final String businessName;
-    private final int adminId;
+    private final int inboundId;              // 입고 ID
+    private final LocalDateTime inboundRequestDate; // 입고 요청 날짜
+    private final LocalDateTime inboundDate;  // 실제 입고 날짜
+    private final String inboundStatus;       // 입고 상태 (승인, 대기, 취소)
+    private final int inboundAmount;          // 입고 수량
+    private final String productName;         // 제품명 (추가)
+    private final String businessName;        // 사업체명 (추가)
+    private final int adminId;                // 담당 관리자 ID
+
 
     @Override
     public String toString() {

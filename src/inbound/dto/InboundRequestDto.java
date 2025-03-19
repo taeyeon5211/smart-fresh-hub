@@ -16,4 +16,17 @@ public class InboundRequestDto {
     private String status; // "승인", "대기", "취소"
     private LocalDateTime requestDate;
     private int adminId;
+
+
+    @Override
+    public String toString() {
+        return "InboundRequestDto{" +
+                "inboundId=" + inboundId +
+                ", productId=" + productId +
+                ", amount=" + amount +
+                ", status='" + status + '\'' +
+                ", requestDate=" + requestDate +
+                ", adminId=" + adminId +
+                '}';
+    }
 }
