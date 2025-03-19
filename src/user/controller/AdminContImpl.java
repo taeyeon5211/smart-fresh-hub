@@ -1,4 +1,5 @@
 package user.controller;
+import login.dto.LoginResDTO;
 import user.dto.UserDTO;
 import user.service.UserService;
 
@@ -27,6 +28,34 @@ public class AdminContImpl implements AdminCont {
         userService.findUser(userLoginId);
 
     }
+    @Override
+    public void readMyAccount(LoginResDTO loginedUser) { //
+        System.out.println(loginedUser);
+    }
+
+    @Override
+    public void updateMyAccount(LoginResDTO loginedUser) throws SQLException {
+        System.out.println("===== 회원 정보 수정 메뉴 =====");
+        System.out.println("1. 비밀번호 변경");
+        System.out.println("2. 주소 변경");
+        System.out.println("3. 이름 변경");
+        System.out.println("4. 이메일 변경");
+        System.out.println("5. 전화번호 변경");
+        System.out.println("6. 생년월일 변경");
+        System.out.println("7. 사용자 유형 변경");
+        System.out.print("변경할 항목의 번호를 선택하세요: ");
+
+        int choice = sc.nextInt();
+
+
+        UserDTO fetchedUser = userService.findUser(loginedUser.getUserLoginId());
+        userService.updateUser(fetchedUser, choice);
+    }
+    @Override
+    public void deleteMyAccount(LoginResDTO loginedUser) {
+        userService.deleteUser(loginedUser.getUserLoginId()); // 서비스계층에게 넘기기
+
+    }
 
     @Override
     public void updateUser() throws SQLException {
@@ -53,6 +82,6 @@ public class AdminContImpl implements AdminCont {
     @Override
     public void deleteUser() {
         String userLoginId = UserInputHelper.inputUserLoginId();
-        userService.deleteUser(userLoginId); // 서비스계층에게 넘기기
+        userService.deleteUser(userLoginId);
     }
 }
