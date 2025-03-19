@@ -1,11 +1,13 @@
 package inbound.repository;
 
+import inbound.dto.ProductDto;
 import inbound.vo.ProductVo;
 import object.ObjectIo;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -66,9 +68,44 @@ public class ProductRepositoryImp implements ProductRepository {
         return categoryMap;
     }
 
+    @Override
+    public Optional<ProductDto> getProductById(int productId) {
+        String sql = """
+        SELECT product_id, product_size, product_name, category_mid_id, 
+               storage_temperature, expiration_date, business_id, created_at
+        FROM product
+        WHERE product_id = ?
+    """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(ProductDto.builder()
+                        .productId(rs.getInt("product_id"))
+                        .productSize(rs.getInt("product_size"))
+                        .productName(rs.getString("product_name"))
+                        .categoryMidId(rs.getInt("category_mid_id"))
+                        .storageTemperature(rs.getInt("storage_temperature"))
+                        .expirationDate(rs.getDate("expiration_date").toLocalDate())
+                        .businessId(rs.getInt("business_id"))
+                        .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+                        .build()
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("제품 조회 중 DB 오류 발생", e);
+        }
+
+        return Optional.empty(); // 제품이 없으면 빈 값 반환
+    }
+
     public static void main(String[] args) {
         ProductRepositoryImp productRepositoryImp1 = new ProductRepositoryImp();
 
+        Optional<ProductDto> productById = productRepositoryImp1.getProductById(1);
+        System.out.println(productById);
 
     }
 }
