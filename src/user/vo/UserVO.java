@@ -22,9 +22,9 @@ public class UserVO {
     private final String userPhone;
     private final LocalDate userBirthDate; // LocalDate 이유
     private final LocalDateTime userCreatedAt; // localDateTime 이유
-    private final UserType userType;
+    private final String userType;
 
-    public UserVO(Integer userId, String userLoginId, String userPassword, String userAddress, String userName, String userEmail, String userPhone, LocalDate userBirthDate, LocalDateTime userCreatedAt, UserType userType) {
+    public UserVO(Integer userId, String userLoginId, String userPassword, String userAddress, String userName, String userEmail, String userPhone, LocalDate userBirthDate, LocalDateTime userCreatedAt, String userType) {
         this.userId = userId;
         this.userLoginId = userLoginId;
         this.userPassword = userPassword;
@@ -50,27 +50,13 @@ public class UserVO {
         this.userPhone = dto.getUserPhone();
         this.userBirthDate = dto.getUserBirthDate();
         this.userCreatedAt = dto.getUserCreatedAt();
-        this.userType = dto.getUserType();
+        this.userType = String.valueOf(dto.getUserType());
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    //    public static UserVO fromDTO(UserDTO dto) {
-//        return UserVO.builder()
-//                .userId(dto.getUserId())
-//                .userLoginId(dto.getUserLoginId())
-//                .userPassword(dto.getUserPassword())
-//                .userAddress(dto.getUserAddress())
-//                .userName(dto.getUserName())
-//                .userEmail(dto.getUserEmail())
-//                .userPhone(dto.getUserPhone())
-//                .userBirthDate(dto.getUserBirthDate())
-//                .userCreatedAt(dto.getUserCreatedAt())
-//                .userType(dto.getUserType())
-//                .build();
-//    }
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
