@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
      * @return LoginReqDTO
      */
     @Override
-    public LoginReqDTO authLogin(String loginId, String password) {
+    public LoginResDTO authLogin(String loginId, String password) {
         // 받은 정보를 DTO로 생성
         LoginReqDTO loginReqDTO = new LoginReqDTO(loginId, password);
 
@@ -36,7 +36,7 @@ public class LoginServiceImpl implements LoginService {
             }
             // resDto가 널이 아니면 성공
             System.out.println("로그인 성공: " + loginResDto.getUserName());
-            return loginReqDTO;
+            return loginResDto;
         } catch (Exception e) {
             System.out.println("로그인 중 예기치 않은 오류 발생: " + e.getMessage()); // 어떤 오류인지 확인하기
             throw new RuntimeException("로그인 처리 중 오류가 발생했습니다.", e);
