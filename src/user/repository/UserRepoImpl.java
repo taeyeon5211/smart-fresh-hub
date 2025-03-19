@@ -32,9 +32,10 @@ public class UserRepoImpl implements UserRepo {
         Boolean isSuccess = false;
         // user_id, created_at  등은 사용자로부터 받는 것 아님!
 
-        String InsertUserPrc = "CALL InsertUser(?,?,?,?,?,?, ?,?)";
+        String InsertUserPrc = "CALL InsertUser(?,?,?,?,?,?,?,?)";
         try { // insertQuery 실행시켜 디비에 회원 레코드 저장하기
             cs = connection.prepareCall(InsertUserPrc);
+
             cs.setString(1, vo.getUserLoginId());
             cs.setString(2, vo.getUserName());
             cs.setString(3, vo.getUserPassword());
@@ -76,6 +77,7 @@ public class UserRepoImpl implements UserRepo {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             if (rs.next()) {
                 userVo = UserVO.builder() // rs에서 받은 레코드로 vo 생성하기
+                        .userId(rs.getInt("user_id"))
                         .userLoginId(rs.getString("user_login_id"))
                         .userName(rs.getString("user_name"))
                         .userPassword(rs.getString("user_password"))

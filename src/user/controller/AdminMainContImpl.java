@@ -16,9 +16,9 @@ public class AdminMainContImpl {
     public void start() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            checkUser(); // admin/client 반환
 
-            if(checkUser() == "admin") printMenu();
+
+          printMenu();
             // if user... 추가하기
             String choice = scanner.nextLine();
 
@@ -33,17 +33,6 @@ public class AdminMainContImpl {
                 }
                 default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
             }
-        }
-    }
-
-    private String checkUser() {
-
-        String userType;
-        while (true) {
-            System.out.print("사용자 유형을 입력하세요 (admin / client): ");
-            userType = sc.nextLine().trim().toLowerCase();
-
-            return userType;
         }
     }
 

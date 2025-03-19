@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class AreaRepositoryImp implements AreaRepository {
+
+    /**
+     * 창고별 사용공간 리스트 구해오는 메서드
+     * @return 창고id, 사용공간 리스트 반환
+     */
     @Override
     public Optional<List<AreaUsedSpaceDto>> getSpaceGroupByWarehouse() {
         List<AreaUsedSpaceDto> list = new ArrayList<>();
@@ -39,9 +44,8 @@ public class AreaRepositoryImp implements AreaRepository {
     }
 
     /**
-     * 구역 전체 출력 (dto에서 마지막 파리미터 남은 공간 값은 비어있음)
-     *
-     * @return
+     * 구역 전체 테이블 반환 메서드 (dto에서 마지막 파리미터 남은 공간 값은 비어있음)
+     * @return 구역 리스트 반환
      */
     @Override
     public Optional<List<AreaDto>> getAreaAll() {
@@ -54,6 +58,7 @@ public class AreaRepositoryImp implements AreaRepository {
             while (resultSet.next()) {
                 AreaVo areaVo = new AreaVo(resultSet.getInt("area_id"),
                         resultSet.getInt("area_space"),
+                        resultSet.getString("area_code"),
                         resultSet.getInt("area_price"),
                         resultSet.getInt("warehouse_id"),
                         resultSet.getInt("storage_id"));
@@ -63,7 +68,7 @@ public class AreaRepositoryImp implements AreaRepository {
                         .areaSpace(areaVo.getAreaSpace())
                         .areaPrice(areaVo.getAreaPrice())
                         .warehouseId(areaVo.getWarehouseId())
-                        .storage_id(areaVo.getStorage_id())
+                        .storageId(areaVo.getStorage_id())
                         .build());
             }
         } catch (SQLException e) {
@@ -73,8 +78,7 @@ public class AreaRepositoryImp implements AreaRepository {
     }
 
     /**
-     * 구역 아이디 받아서 사용중인 공간 을 찾기위해 ProductUsedSpaceDto 가져옴
-     *
+     * 구역 아이디 받아서 사용중인 공간 을 찾기위해 ProductUsedSpaceDto 가져오는 메서드 (service )
      * @param areaId
      * @return
      */
@@ -105,11 +109,53 @@ public class AreaRepositoryImp implements AreaRepository {
         return Optional.empty();
     }
 
-    public static void main(String[] args) {
-        AreaRepositoryImp areaRepositoryImp = new AreaRepositoryImp();
-        areaRepositoryImp.getSpaceGroupByWarehouse().orElse(new ArrayList<>()).forEach(System.out::println);
-        areaRepositoryImp.getAreaAll().orElse(new ArrayList<>()).forEach(System.out::println);
-        System.out.println("zz");
-        System.out.println(areaRepositoryImp.getUsedSpaceById(10));
+    /**
+     * 아이디, 보관상태 아이디 받아서 업데이트
+     * @param areaDto
+     */
+    @Override
+    public void UpdateAreaTemp(AreaDto areaDto) {
+        String sql = "update area_table set storage_id = ? where area_id = ?;";
+        try (Connection connection = ObjectIo.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1, areaDto.getStorageId());
+            preparedStatement.setInt(2,areaDto.getAreaId());
+            Optional<Integer> row = Optional.of(preparedStatement.executeUpdate());
+            row.filter(x -> x > 0).orElseThrow(() -> new SQLException("구역 보관온도 업데이트 실패(id값을 확인하세요)"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    @Override
+    public void CreateArea(AreaDto areaDto) {
+        String sql = "insert into area_table (area_space, area_code , area_price, warehouse_id, storage_id) values (?, ?, ?, ?,?);";
+        try(Connection connection = ObjectIo.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1, areaDto.getAreaSpace());
+            preparedStatement.setString(2, areaDto.getAreaCode());
+            preparedStatement.setInt(3,areaDto.getAreaPrice());
+            preparedStatement.setInt(4,areaDto.getWarehouseId());
+            preparedStatement.setInt(5,areaDto.getStorageId());
+            Optional<Integer> row = Optional.of(preparedStatement.executeUpdate());
+            row.filter(x -> x > 0).orElseThrow(() -> new SQLException("창고 추가 sql문 실행 실패"));
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+//        public static void main(String[] args) {
+//        AreaRepositoryImp areaRepositoryImp = new AreaRepositoryImp();
+//        areaRepositoryImp.getSpaceGroupByWarehouse().orElse(new ArrayList<>()).forEach(System.out::println);
+//        areaRepositoryImp.getAreaAll().orElse(new ArrayList<>()).forEach(System.out::println);
+//        System.out.println("zz");
+//        System.out.println(areaRepositoryImp.getUsedSpaceById(10));
+//            areaRepositoryImp.CreateArea(AreaDto.builder()
+//                            .areaSpace(1)
+//                            .AreaCode("A")
+//                            .areaPrice(1)
+//                            .warehouseId(1)
+//                            .storageId(1)
+//                    .build());
+//    }
 }
