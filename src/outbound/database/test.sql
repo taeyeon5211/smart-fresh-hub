@@ -145,45 +145,28 @@ insert into revenue_table (revenue_amount, product_id, area_id) VALUES
 select * from revenue_table;
 
 select * from outbound_table;
+select * from outbound_table where product_id in (select product_id from product where business_id = 2);
 
 UPDATE revenue_table r
     JOIN product p ON r.product_id = p.product_id
     JOIN outbound_table o ON o.product_id = p.product_id
 SET r.revenue_amount = r.revenue_amount - o.outbound_amount
 WHERE o.outbound_status = '승인'
-  AND p.business_id = 1
   AND r.revenue_amount >= o.outbound_amount; -- 재고 부족 시 업데이트되지 않도록 조건 추가
 
 select * from revenue_table;
-
-select r.revenue_amount, o.outbound_amount, p.business_id from revenue_table r
+select * from revenue_history_table;
+-- 승인된 출고목록
+select distinct r.revenue_amount, o.outbound_id, o.outbound_amount, p.business_id from revenue_table r
     JOIN product p ON r.product_id = p.product_id
     JOIN outbound_table o ON o.product_id = p.product_id
-WHERE o.outbound_status = '승인'
-  AND p.business_id = 1;
+WHERE o.outbound_status = '승인';
+
+select * from outbound_table where outbound_status = '대기';
+update outbound_table set outbound_status = '승인' where outbound_id = 1;
+select * from revenue_history_table;
 
 select * from business_table;
-INSERT INTO business_table (business_id, business_regist_num, business_name, business_address, user_id)
-VALUES
-    (7, '123-45', 'ABC Company', 'Seoul, Korea', 1),
-    (8, '456-78-90123', 'XYZ Enterprise', 'Busan, Korea', 2);
 
-INSERT INTO product (product_id, product_size, product_name, category_mid_id, storage_temperature, expiration_date, business_id)
-VALUES
-    (101, 30, 'Widget A', 1, 10, '2025-12-31', 1), -- ABC Company의 제품
-    (102, 20, 'Widget B', 1, 15, '2024-11-30', 1), -- ABC Company의 제품
-    (201, 50, 'Gadget X', 2, 5, '2025-06-30', 2);  -- XYZ Enterprise의 제품
-
-INSERT INTO revenue_table (revenue_id, product_id, revenue_amount)
-VALUES
-    (1, 101, 100), -- Widget A: 100개 재고
-    (2, 102, 50),  -- Widget B: 50개 재고
-    (3, 201, 80);  -- Gadget X: 80개 재고
-
-INSERT INTO outbound_table (outbound_id, product_id, outbound_amount, outbound_status)
-VALUES
-    (1, 101, 20, '승인'),  -- Widget A, 20개 승인 출고 요청
-    (2, 102, 15, '승인'),  -- Widget B, 15개 승인 출고 요청
-    (3, 102, 40, '대기'),  -- Widget B, 40개 대기 출고 요청
-    (4, 201, 50, '승인');  -- Gadget X, 50개 승인 출고 요청
-
+select * from outbound_table;
+delete from outbound_table where outbound_id = 12;

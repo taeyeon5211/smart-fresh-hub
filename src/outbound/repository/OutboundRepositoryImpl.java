@@ -115,6 +115,27 @@ public class OutboundRepositoryImpl implements OutboundRepository{
         }
     }
 
+    //출고 상태 승인 -> 재고 히스토리 | 재고 0되면 삭제 -> 서비스단에서 가져와서
+    @Override
+    public void updateRevenue() {
+        String sql = "UPDATE revenue_table r" +
+                " JOIN product p ON r.product_id = p.product_id" +
+                " JOIN outbound_table o ON o.product_id = p.product_id" +
+                " SET r.revenue_amount = r.revenue_amount - o.outbound_amount" +
+                " WHERE o.outbound_status = '승인'" +
+                " AND r.revenue_amount >= o.outbound_amount";
+        try (Connection conn = ObjectIo.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //재고 히스토리 업데이트 기능
+
+    //재고 히스토리 출력 기능
+
     public static void main(String[] args) {
         OutboundRepositoryImpl outboundRepository = new OutboundRepositoryImpl();
 //        OutboundDTO outboundDTO0 = new OutboundDTO().builder().outboundAmount(100).productId(1).build();
@@ -122,14 +143,14 @@ public class OutboundRepositoryImpl implements OutboundRepository{
 //
 //        outboundRepository.updateOutboundStatus("승인", 1, LocalDateTime.now(), 2);
 //
-//        Optional<List<OutboundDTO>> outboundDTOS = outboundRepository.readOutboundRequest();
-//        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
-//            System.out.println(outboundDTO.toString());
-//        }
-
-        Optional<List<OutboundDTO>> outboundDTOS1 = outboundRepository.readOutboundStatus(1);
-        for (OutboundDTO outboundDTO : outboundDTOS1.orElse(null)) {
+        Optional<List<OutboundDTO>> outboundDTOS = outboundRepository.readOutboundRequest();
+        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
             System.out.println(outboundDTO.toString());
         }
+
+//        Optional<List<OutboundDTO>> outboundDTOS1 = outboundRepository.readOutboundStatus(2);
+//        for (OutboundDTO outboundDTO : outboundDTOS1.orElse(null)) {
+//            System.out.println(outboundDTO.toString());
+//        }
     }
 }

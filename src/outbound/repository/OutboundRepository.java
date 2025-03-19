@@ -20,4 +20,6 @@ public interface OutboundRepository {
     Optional<List<OutboundDTO>> readOutboundRequest();
 
     void updateOutboundStatus(String newStatus, int adminId, LocalDateTime outboundDate, int outboundId);
+
+    void updateRevenue();
 }
