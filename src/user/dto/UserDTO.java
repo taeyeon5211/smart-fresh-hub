@@ -53,7 +53,7 @@ public class UserDTO {
             this.userPhone = vo.getUserPhone();
             this.userBirthDate = vo.getUserBirthDate();
             this.userCreatedAt = vo.getUserCreatedAt();
-            //this.userType = vo.getUserType();
+            this.userType = vo.getUserType();
 
         }
     }
@@ -72,7 +72,7 @@ public class UserDTO {
         this.userPhone = vo.getUserPhone();
         this.userBirthDate = vo.getUserBirthDate();
         this.userCreatedAt = vo.getUserCreatedAt();
-        //this.userType = vo.getUserType();
+        this.userType = vo.getUserType();
     }
 
 }

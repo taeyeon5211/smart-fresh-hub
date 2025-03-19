@@ -16,5 +16,5 @@ public interface AdminCont {
     void updateMyAccount(LoginResDTO loginedUser) throws SQLException;
 
     void deleteMyAccount(LoginResDTO loginedUser);
-
+    void readClientBackUpTbl() throws SQLException;
 }

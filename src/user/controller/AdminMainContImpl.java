@@ -28,6 +28,7 @@ public class AdminMainContImpl {
                     case "2" -> findUser();
                     case "3" -> updateUser();
                     case "4" -> deleteUser();
+                    case "5" -> adminCont.readClientBackUpTbl();
                     case "0" -> {
                         System.out.println("프로그램을 종료합니다.");
                         System.exit(0);
@@ -65,6 +66,7 @@ public class AdminMainContImpl {
         System.out.println(" 2. 회원 조회");
         System.out.println(" 3. 회원 수정");
         System.out.println(" 4. 회원 삭제");
+        System.out.println(" 5. 샥제된 회원 모두 조회");
         System.out.println(" 0. 종료");
         System.out.println("-".repeat(30));
     }
