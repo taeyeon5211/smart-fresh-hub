@@ -1,5 +1,6 @@
 package user.service;
 
+import user.controller.UserInputHelper;
 import user.dto.UserDTO;
 import user.repository.UserRepo;
 import user.vo.UserVO;
@@ -29,7 +30,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserDTO dto) {
         // 1. 디비에서 중복회원인지 검사
-//        // 3. 비번 암호화
 
         // dto 를 vo로 변환후 repo불러 디비에 저장
         UserVO userVo = new UserVO(dto); // vo로 변환
@@ -50,8 +50,26 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public void updateUser(UserDTO userDTO) {
-        userRepo.updateUser(userDTO);
+
+
+    /**
+     *
+     * @param
+     */
+    public void updateUser(UserDTO updatedUser, int choice) throws SQLException {
+        UserVO userVo = new UserVO(updatedUser);
+
+            switch (choice) {
+                case 1 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserPassword());
+                case 2 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserAddress());
+                case 3 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserName());
+                case 4 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserEmail());
+                case 5 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserPhone());
+                case 6 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserBirthDate().toString());
+                case 7 -> userRepo.updateUser(userVo, choice, UserInputHelper.inputUserType().toString());
+                default -> System.out.println("잘못된 입력입니다: " + choice);
+            }
+
     }
 
     /**

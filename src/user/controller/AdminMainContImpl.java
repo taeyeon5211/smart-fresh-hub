@@ -1,5 +1,6 @@
 package user.controller;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -12,8 +13,7 @@ public class AdminMainContImpl {
     }
 
 
-
-    public void start() {
+    public void start() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             printMenu();
@@ -53,7 +53,7 @@ public class AdminMainContImpl {
         adminCont.findUser();
     }
 
-    private void updateUser() {
+    private void updateUser() throws SQLException {
         adminCont.updateUser();
     }
 
