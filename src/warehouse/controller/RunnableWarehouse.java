@@ -23,10 +23,7 @@ public class RunnableWarehouse implements Runnable {
             switch (menuNum) {
                 case 1: warehouseController.createWarehouse(); break;
                 case 2: warehouseController.getWarehouseByAddress();break;
-                case 3: {
-                    warehouseController.getWarehouseById();
-                    
-                }break;
+                case 3: warehouseController.getWarehouseById();break;
                 case 4: running = false;
             }
         }
