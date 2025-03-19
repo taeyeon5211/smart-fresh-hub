@@ -33,6 +33,7 @@ public class OutboundServiceImpl implements OutboundService {
     @Override
     public void updateOutboundStatus(String newStatus, int adminId, LocalDateTime outboundDate, int outboundId) {
         outboundRepository.updateOutboundStatus(newStatus, adminId, outboundDate, outboundId);
+
     }
 
     @Override

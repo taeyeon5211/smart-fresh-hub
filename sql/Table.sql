@@ -157,7 +157,7 @@ CREATE TABLE revenue_table (
 CREATE TABLE revenue_history_table (
                                        revenue_id INT NOT NULL,
                                        change_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-                                       revenue_quan tity INT NOT NULL,
+                                       revenue_quantity INT NOT NULL,
                                        change_type ENUM('입고', '출고', '폐기', '조정') NOT NULL,
                                        PRIMARY KEY (revenue_id, change_date)
 );

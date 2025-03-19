@@ -300,6 +300,8 @@ public class InboundControllerImp implements InboundController {
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
         }
+
+
     }
 
     /**
