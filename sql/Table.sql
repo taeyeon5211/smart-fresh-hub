@@ -90,10 +90,10 @@ CREATE TABLE inbound_table (
 -- 9. 출고 테이블
 CREATE TABLE outbound_table (
                                 outbound_id INT AUTO_INCREMENT PRIMARY KEY,
-                                outbound_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                outbound_request_date TIMESTAMP,
-                                outbound_status ENUM('승인', '대기', '취소') NOT NULL,
-                                admin_id INT NOT NULL,
+                                outbound_date TIMESTAMP,
+                                outbound_request_date TIMESTAMP default current_timestamp,
+                                outbound_status ENUM('승인', '대기', '취소') default '대기',
+                                admin_id INT,
                                 outbound_amount INT NOT NULL,
                                 product_id INT NOT NULL
 );
