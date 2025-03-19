@@ -14,16 +14,16 @@ DROP TABLE IF EXISTS user_table;
 DROP TABLE IF EXISTS area_table;
 DROP TABLE IF EXISTS warehouse_table;
 DROP TABLE IF EXISTS storage_condition;
+Drop TABLE IF EXISTS user_backup_table;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
 
 USE wms_db;
-
--- 1. 유저 테이블
 CREATE TABLE user_table (
                             user_id INT AUTO_INCREMENT PRIMARY KEY,
                             user_login_id VARCHAR(50) NOT NULL UNIQUE,
+                            user_name VARCHAR(30) NOT NULL,
                             user_password VARCHAR(255) NOT NULL,
                             user_address VARCHAR(255),
                             user_email VARCHAR(100) UNIQUE,
@@ -31,6 +31,22 @@ CREATE TABLE user_table (
                             user_birth_date DATE,
                             user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             user_type ENUM('admin', 'client') NOT NULL
+);
+
+-- 15. 회원 백업용 테이블
+CREATE TABLE user_backup_table (
+                                   backup_id INT AUTO_INCREMENT PRIMARY KEY, -- 백업 데이터의 고유 ID
+                                   user_id INT, -- 삭제된 사용자 ID
+                                   user_login_id VARCHAR(50) NOT NULL,
+                                   user_name VARCHAR(100),
+                                   user_password VARCHAR(255),
+                                   user_address VARCHAR(255),
+                                   user_email VARCHAR(100),
+                                   user_phone VARCHAR(20),
+                                   user_birth_date DATE,
+                                   user_created_at DATETIME,
+                                   user_type ENUM('admin', 'client') NOT NULL,
+                                   deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 삭제된 시간 기록
 );
 
 

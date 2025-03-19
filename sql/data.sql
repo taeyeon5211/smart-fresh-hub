@@ -1,17 +1,17 @@
 use wms_db;
 -- 유저 테이블에 10개 목업 데이터 삽입
-INSERT INTO user_table (user_login_id, user_password, user_address, user_email, user_phone, user_birth_date, user_type)
+INSERT INTO user_table (user_login_id, user_name ,user_password, user_address, user_email, user_phone, user_birth_date, user_type)
 VALUES
-    ('user1', 'password1', 'Seoul, Gangnam', 'user1@example.com', '010-1111-1111', '1990-01-01', 'client'),
-    ('user2', 'password2', 'Seoul, Mapo', 'user2@example.com', '010-2222-2222', '1985-05-12', 'client'),
-    ('user3', 'password3', 'Busan, Haeundae', 'user3@example.com', '010-3333-3333', '1992-03-25', 'admin'),
-    ('user4', 'password4', 'Daegu, Dalseo', 'user4@example.com', '010-4444-4444', '1988-07-30', 'client'),
-    ('user5', 'password5', 'Incheon, Bupyeong', 'user5@example.com', '010-5555-5555', '1994-11-11', 'client'),
-    ('user6', 'password6', 'Seoul, Yongsan', 'user6@example.com', '010-6666-6666', '1982-02-20', 'admin'),
-    ('user7', 'password7', 'Seoul, Jongno', 'user7@example.com', '010-7777-7777', '1990-12-14', 'client'),
-    ('user8', 'password8', 'Gyeonggi, Suwon', 'user8@example.com', '010-8888-8888', '1995-09-18', 'client'),
-    ('user9', 'password9', 'Busan, Seo-gu', 'user9@example.com', '010-9999-9999', '1986-06-09', 'admin'),
-    ('user10', 'password10', 'Seoul, Gangdong', 'user10@example.com', '010-0000-0000', '1989-10-25', 'client');
+    ('user1', 'aaaa' ,'password1', 'Seoul, Gangnam', 'user1@example.com', '010-1111-1111', '1990-01-01', 'client'),
+    ('user2','bbbb' , 'password2', 'Seoul, Mapo', 'user2@example.com', '010-2222-2222', '1985-05-12', 'client'),
+    ('user3', 'cccc','password3', 'Busan, Haeundae', 'user3@example.com', '010-3333-3333', '1992-03-25', 'admin'),
+    ('user4', 'dddd','password4', 'Daegu, Dalseo', 'user4@example.com', '010-4444-4444', '1988-07-30', 'client'),
+    ('user5', 'eeee','password5', 'Incheon, Bupyeong', 'user5@example.com', '010-5555-5555', '1994-11-11', 'client'),
+    ('user6', 'ffff','password6', 'Seoul, Yongsan', 'user6@example.com', '010-6666-6666', '1982-02-20', 'admin'),
+    ('user7', 'gggg','password7', 'Seoul, Jongno', 'user7@example.com', '010-7777-7777', '1990-12-14', 'client'),
+    ('user8','yyyy' ,'password8', 'Gyeonggi, Suwon', 'user8@example.com', '010-8888-8888', '1995-09-18', 'client'),
+    ('user9','trete', 'password9', 'Busan, Seo-gu', 'user9@example.com', '010-9999-9999', '1986-06-09', 'admin'),
+    ('user10', 'ettre','password10', 'Seoul, Gangdong', 'user10@example.com', '010-0000-0000', '1989-10-25', 'client');
 
 -- 관리자 테이블에 5개 목업 데이터 삽입 (user_id는 이미 유저 테이블에 있는 값)
 INSERT INTO admin_table (admin_hire_date, admin_position, user_id)
