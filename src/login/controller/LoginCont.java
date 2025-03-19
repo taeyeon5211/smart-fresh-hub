@@ -2,8 +2,9 @@ package login.controller;
 
 
 import login.dto.LoginResDTO;
+import user.vo.UserType;
 
 public interface LoginCont {
-    void inputLogin();
-    String checkUserType(LoginResDTO resDto);
+    LoginResDTO inputLogin();
+    String checkUserType(LoginResDTO loginResDto);
 }
