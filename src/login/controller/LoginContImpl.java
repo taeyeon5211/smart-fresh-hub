@@ -2,6 +2,7 @@ package login.controller;
 
 import login.dto.LoginResDTO;
 import login.service.LoginService;
+import user.vo.UserType;
 
 import java.util.Scanner;
 
@@ -28,5 +29,8 @@ public class LoginContImpl implements LoginCont{
         return loginResDto;
     }
 
-
+    @Override
+    public String checkUserType(LoginResDTO loginResDto) {
+        return loginResDto.getUserType();
+    }
 }

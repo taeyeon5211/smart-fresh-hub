@@ -2,6 +2,7 @@ use wms_db;
 -- 회원 생성 프로시저
 delimiter $$
 CREATE PROCEDURE InsertUser(
+
     IN p_user_login_id VARCHAR(50),
     IN p_user_name VARCHAR(30),
     IN p_user_password VARCHAR(255), -- 나중에 해싱하여 디비에 저장하기

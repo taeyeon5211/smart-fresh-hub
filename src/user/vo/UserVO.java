@@ -50,7 +50,7 @@ public class UserVO {
         this.userPhone = dto.getUserPhone();
         this.userBirthDate = dto.getUserBirthDate();
         this.userCreatedAt = dto.getUserCreatedAt();
-        this.userType = dto.getUserType();
+        this.userType = (dto.getUserType());
     }
 
     public Integer getUserId() {
