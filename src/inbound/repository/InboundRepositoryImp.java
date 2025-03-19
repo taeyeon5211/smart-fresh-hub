@@ -1,16 +1,14 @@
 package inbound.repository;
 
 
+import inbound.dto.InboundRequestDto;
 import inbound.exception.InboundException;
 import inbound.vo.InboundHistoryVo;
 import inbound.vo.InboundVo;
 import object.ObjectIo;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InboundRepositoryImp implements InboundRepository {
 
@@ -70,21 +68,12 @@ public class InboundRepositoryImp implements InboundRepository {
     //  모든 '대기' 상태 입고 요청 목록 조회
     @Override
     public List<InboundHistoryVo> findAllPendingInboundRequests() {
-        String sql = """
-            SELECT i.inbound_id, i.inbound_request_date, i.inbound_date, 
-                   i.inbound_status, i.inbound_amount, 
-                   p.product_name, b.business_name, a.admin_id
-            FROM inbound_table i
-            JOIN product p ON i.product_id = p.product_id
-            JOIN business_table b ON p.business_id = b.business_id
-            JOIN admin_table a ON i.admin_id = a.admin_id
-            WHERE i.inbound_status = '대기'
-            ORDER BY i.inbound_request_date DESC
-        """;
+        String sql = "{CALL GetPendingInboundRequests()}"; //  저장 프로시저 호출
 
         List<InboundHistoryVo> inboundList = new ArrayList<>();
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        try (CallableStatement cstmt = conn.prepareCall(sql);
+
+             ResultSet rs = cstmt.executeQuery()) { //  저장 프로시저 실행
 
             while (rs.next()) {
                 inboundList.add(new InboundHistoryVo(
@@ -110,94 +99,126 @@ public class InboundRepositoryImp implements InboundRepository {
     }
 
 
+    /**
+     * 특정 입고 요청 정보를 데이터베이스에서 조회하는 메서드.
+     *
+     * @param inboundId 조회할 입고 요청의 ID
+     * @return 해당 입고 요청 정보를 포함하는 Optional<InboundRequestDto>,
+     *         입고 요청이 존재하지 않으면 Optional.empty()
+     * @throws InboundException 데이터베이스 조회 중 오류가 발생한 경우
+     */
+    @Override
+    public Optional<InboundRequestDto> getInboundById(int inboundId) {
+        String sql = """
+        SELECT inbound_id, product_id, inbound_amount, inbound_status, 
+               inbound_request_date, admin_id
+        FROM inbound_table
+        WHERE inbound_id = ?
+    """;
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, inboundId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(InboundRequestDto.builder()
+                        .inboundId(rs.getInt("inbound_id"))
+                        .productId(rs.getInt("product_id"))
+                        .amount(rs.getInt("inbound_amount"))
+                        .status(rs.getString("inbound_status"))
+                        .requestDate(rs.getTimestamp("inbound_request_date").toLocalDateTime())
+                        .adminId(rs.getInt("admin_id"))
+                        .build()
+                );
+            }
+        } catch (SQLException e) {
+            throw new InboundException("입고 요청 조회 중 DB 오류 발생", e);
+        }
+
+        return Optional.empty(); // 요청이 없을 경우 빈 값 반환
+    }
+
 
     // 모든 입고 내역을 조회한다.
     @Override
     public List<InboundHistoryVo> findAllInboundHistory() {
-        String sql = """
-            SELECT i.inbound_id, i.inbound_request_date, i.inbound_date, 
-                   i.inbound_status, i.inbound_amount, 
-                   p.product_name, b.business_name, a.admin_id
-            FROM inbound_table i
-            JOIN product p ON i.product_id = p.product_id
-            JOIN business_table b ON p.business_id = b.business_id
-            JOIN admin_table a ON i.admin_id = a.admin_id
-            ORDER BY i.inbound_request_date DESC
-        """;
+        // 저장 프로시저를 호출하는 SQL
+        String sql = "{CALL GetAllInboundHistory()}";
 
         List<InboundHistoryVo> inboundList = new ArrayList<>();
-        try (PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
 
+        try (
+                // CallableStatement를 사용하여 저장 프로시저 호출
+                CallableStatement cstmt = conn.prepareCall(sql);
+                ResultSet rs = cstmt.executeQuery() // 실행 후 결과(ResultSet) 가져오기
+        ) {
             while (rs.next()) {
+                // 결과를 리스트에 추가 (VO 객체 생성)
                 inboundList.add(new InboundHistoryVo(
-                        rs.getInt("inbound_id"),
-                        rs.getTimestamp("inbound_request_date").toLocalDateTime(),
-                        rs.getTimestamp("inbound_date") != null ? rs.getTimestamp("inbound_date").toLocalDateTime() : null,
-                        rs.getString("inbound_status"),
-                        rs.getInt("inbound_amount"),
-                        rs.getString("product_name"),
-                        rs.getString("business_name"),
-                        rs.getInt("admin_id")
+                        rs.getInt("inbound_id"),  // 입고 요청 ID
+                        rs.getTimestamp("inbound_request_date").toLocalDateTime(),  // 요청 날짜
+                        rs.getTimestamp("inbound_date") != null ? rs.getTimestamp("inbound_date").toLocalDateTime() : null,  // 실제 입고 날짜 (null 가능)
+                        rs.getString("inbound_status"),  // 입고 상태 (승인, 대기, 취소)
+                        rs.getInt("inbound_amount"),  // 입고 수량
+                        rs.getString("product_name"),  // 제품명
+                        rs.getString("business_name"),  // 사업체명
+                        rs.getInt("admin_id")  // 담당 관리자 ID
                 ));
             }
         } catch (SQLException e) {
-            throw new InboundException(" 모든 입고 내역 조회 중 DB 오류 발생", e);
+            //  SQL 실행 중 오류 발생 시 예외 처리
+            throw new InboundException("모든 입고 내역 조회 중 DB 오류 발생", e);
         }
 
+        //  조회된 데이터가 없을 경우 예외 발생
         if (inboundList.isEmpty()) {
-            throw new InboundException(" 현재 등록된 입고 내역이 없습니다.");
+            throw new InboundException("현재 등록된 입고 내역이 없습니다.");
         }
 
-        return inboundList;
+        return inboundList; //  최종 리스트 반환
     }
 
 
     // 특정 사업체(화주)의 입고 내역을 조회한다.
     @Override
     public List<InboundHistoryVo> findInboundHistoryByBusiness(int businessId) {
-        String sql = """
-    SELECT i.inbound_id, i.inbound_request_date, i.inbound_date, 
-           i.inbound_status, i.inbound_amount, 
-           p.product_name, b.business_name, a.admin_id
-    FROM inbound_table i
-    JOIN product p ON i.product_id = p.product_id  -- 제품명 가져오기
-    JOIN business_table b ON p.business_id = b.business_id  -- 사업체명 가져오기
-    JOIN admin_table a ON i.admin_id = a.admin_id
-    WHERE p.business_id = ? 
-    ORDER BY i.inbound_request_date DESC
-    """;
+        String sql = "{CALL GetInboundHistoryByBusiness(?)}";
 
         List<InboundHistoryVo> inboundList = new ArrayList<>();
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, businessId);
-            ResultSet rs = pstmt.executeQuery();
+        try (
+                //  CallableStatement를 사용하여 저장 프로시저 호출
+                CallableStatement cstmt = conn.prepareCall(sql)
+        ) {
+            cstmt.setInt(1, businessId); // 사업체 ID를 프로시저에 전달
+            ResultSet rs = cstmt.executeQuery(); // 실행 후 결과(ResultSet) 가져오기
 
             while (rs.next()) {
-                InboundHistoryVo inboundHistory = new InboundHistoryVo(
-                        rs.getInt("inbound_id"),
-                        rs.getTimestamp("inbound_request_date").toLocalDateTime(),
-                        rs.getTimestamp("inbound_date") != null ? rs.getTimestamp("inbound_date").toLocalDateTime() : null,
-                        rs.getString("inbound_status"),
-                        rs.getInt("inbound_amount"),
-                        rs.getString("product_name"),
-                        rs.getString("business_name"),
-                        rs.getInt("admin_id")
-                );
-                inboundList.add(inboundHistory);
+                // 결과를 리스트에 추가 (VO 객체 생성)
+                inboundList.add(new InboundHistoryVo(
+                        rs.getInt("inbound_id"),  // 입고 요청 ID
+                        rs.getTimestamp("inbound_request_date").toLocalDateTime(),  // 요청 날짜
+                        rs.getTimestamp("inbound_date") != null ? rs.getTimestamp("inbound_date").toLocalDateTime() : null,  // 실제 입고 날짜 (null 가능)
+                        rs.getString("inbound_status"),  // 입고 상태 (승인, 대기, 취소)
+                        rs.getInt("inbound_amount"),  // 입고 수량
+                        rs.getString("product_name"),  // 제품명
+                        rs.getString("business_name"),  // 사업체명
+                        rs.getInt("admin_id")  // 담당 관리자 ID
+                ));
             }
         } catch (SQLException e) {
-            throw new InboundException(" 입고 내역 조회 중 DB 오류 발생: " + e.getMessage(), e);
+            //  SQL 실행 중 오류 발생 시 예외 처리
+            throw new InboundException("입고 내역 조회 중 DB 오류 발생: " + e.getMessage(), e);
         }
 
-        // 조회된 입고 내역이 없을 경우 예외 발생
+        //  조회된 데이터가 없을 경우 예외 발생
         if (inboundList.isEmpty()) {
-            throw new InboundException(" 해당 사업체(ID: " + businessId + ")의 입고 내역이 존재하지 않습니다.");
+            throw new InboundException("해당 사업체(ID: " + businessId + ")의 입고 내역이 존재하지 않습니다.");
         }
 
-        return inboundList;
+        return inboundList; // 최종 리스트 반환
     }
+
 
 
 
@@ -244,7 +265,7 @@ public class InboundRepositoryImp implements InboundRepository {
 
         // 조회된 제품이 없는 경우 예외 발생
         if (productMap.isEmpty()) {
-            throw new InboundException("⚠해당 사업체 (business_id: " + businessId + ")가 등록한 제품이 없습니다.");
+            throw new InboundException("해당 사업체 (business_id: " + businessId + ")가 등록한 제품이 없습니다.");
         }
 
         return productMap;
@@ -255,6 +276,11 @@ public class InboundRepositoryImp implements InboundRepository {
 
         public static void main (String[] args){
             InboundRepository inboundRepository = new InboundRepositoryImp();
+            List<InboundHistoryVo> allPendingInboundRequests = inboundRepository.findInboundHistoryByBusiness(2);
+            for (InboundHistoryVo allPendingInboundRequest : allPendingInboundRequests) {
+                System.out.println(allPendingInboundRequest);
+            }
+
 
         }
     }

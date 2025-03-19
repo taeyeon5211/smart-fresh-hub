@@ -1,9 +1,11 @@
 package inbound.repository;
 
+import inbound.dto.ProductDto;
 import inbound.vo.ProductVo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 제품 관리 기능을 담당하는 Repository 인터페이스.
@@ -25,5 +27,12 @@ public interface ProductRepository {
      * @return 카테고리 목록 (카테고리 ID, 카테고리명) Map 형태 반환
      */
     Map<Integer, String> findAllCategories();
+
+    /**
+     * 특정 제품 정보를 조회하는 메서드.
+     * @param productId 조회할 제품 ID
+     * @return 해당 제품 정보를 포함하는 Optional<ProductDto>, 없으면 Optional.empty()
+     */
+    Optional<ProductDto> getProductById(int productId);
 
 }
