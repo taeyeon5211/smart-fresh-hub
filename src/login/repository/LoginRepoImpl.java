@@ -3,21 +3,17 @@ import login.dto.LoginReqDTO;
 import login.dto.LoginResDTO;
 import object.ObjectIo;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Types;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LoginRepoImpl implements LoginRepo {
-    //private LoginCont loginCont;
     Connection connection = ObjectIo.getConnection();
     CallableStatement cs = null;
     ResultSet rs = null;
 
     @Override
-    public LoginResDTO authLogin(LoginReqDTO loginReqDTO) {
+    public LoginResDTO authLogin(LoginReqDTO loginReqDTO) throws SQLException {
         // 디비에서 찾아본다 FindUser이용해서 아이디 매칭하는 회원이 있는지 알아본다
         String query = "{CALL CheckUserExists(?,?,? )}";
 
@@ -52,21 +48,15 @@ public class LoginRepoImpl implements LoginRepo {
                                     .toLocalDate()).userCreatedAt(LocalDateTime.parse(rs.getString("user_created_at"), formatter))
                             .build();
 
-
                 }
                 // 유저가 있다면 유저 반환
                 return loginResDto;
-            } else {
-                //
-                System.out.println("로그인이나 비밀번호가 틀렸습니다.");
-                //loginCont.inputLogin(); // 다시 컨트롤러로 가서 inputLogin() 실행
             }
 
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new RuntimeException();
         }
-        return null; // backlog 작성항목임. 해야될 것.
+        return null;
     }
-
 }
+
