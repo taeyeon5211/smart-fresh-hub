@@ -1,29 +1,33 @@
 
 USE wms_db;
 
-USE wms_db;
-
 -- 1. 유저 테이블
-CREATE TABLE user_table (
+CREATE TABLE user_table
+(
 
-                            user_id INT AUTO_INCREMENT PRIMARY KEY,
-                            user_login_id VARCHAR(50) NOT NULL UNIQUE,
-                            user_name VARCHAR(30) NOT NULL,
-                            user_password VARCHAR(255) NOT NULL,
-                            user_address VARCHAR(255),
-                            user_email VARCHAR(100) UNIQUE,
-                            user_phone VARCHAR(20),
-                            user_birth_date DATE,
-                            user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                            user_type ENUM('admin', 'client') NOT NULL
+    user_id         INT AUTO_INCREMENT PRIMARY KEY,
+    user_login_id   VARCHAR(50)              NOT NULL UNIQUE,
+    user_name       VARCHAR(30)              NOT NULL,
+    user_password   VARCHAR(255)             NOT NULL,
+    user_address    VARCHAR(255),
+    user_email      VARCHAR(100) UNIQUE,
+    user_phone      VARCHAR(20),
+    user_birth_date DATE,
+    user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    user_type       ENUM ('admin', 'client') NOT NULL
+);
 
 -- 2. 로그인 기록 테이블
-CREATE TABLE login_h_table (
-                               login_h_id INT AUTO_INCREMENT PRIMARY KEY,
-                               login_h_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-                               login_h_logout_time DATETIME,
-                               user_id INT NOT NULL
-);
+# CREATE TABLE auth_attempt_table (
+#                                 auth_attempt_id INT AUTO_INCREMENT PRIMARY KEY,
+#                                 user_id INT NOT NULL,
+#                                 user_login_id VARCHAR(50) NOT NULL,
+#                                 attempt_type ENUM('login', 'logout') NOT NULL,
+#                                 attempt_time DATETIME DEFAULT CURRENT_TIMESTAMP
+#
+# );
+
+
 
 -- 3. 관리자 테이블
 CREATE TABLE admin_table (
@@ -159,7 +163,7 @@ ALTER TABLE user_backup_table
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
 
 -- 로그인 기록 FK
-ALTER TABLE login_h_table
+ALTER TABLE auth_attempt_table
     ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
 
 -- 관리자 FK
