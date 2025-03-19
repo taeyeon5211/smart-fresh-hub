@@ -19,7 +19,7 @@ public class AdminMainContImpl {
     // 총관리자 메뉴 시작
     public void startAdminMenu() throws SQLException {
 
-        while (true) {
+
             printMenu();
             String input = sc.nextLine().trim();
             while(true) {
@@ -36,7 +36,7 @@ public class AdminMainContImpl {
                     default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
                 }
             }
-        }
+
     }
 
     /**
