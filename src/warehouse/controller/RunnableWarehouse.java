@@ -1,5 +1,8 @@
 package warehouse.controller;
 
+import warehouse.repository.WareHouseRepositoryImp;
+import warehouse.service.WareHouseServiceImp;
+
 import java.util.Scanner;
 
 public class RunnableWarehouse implements Runnable {
@@ -27,5 +30,10 @@ public class RunnableWarehouse implements Runnable {
                 case 4: running = false;
             }
         }
+    }
+
+    public static void main(String[] args) {
+        RunnableWarehouse runnableWarehouse = new RunnableWarehouse(new WareHouseControllerImp(new WareHouseServiceImp(new WareHouseRepositoryImp())));
+        runnableWarehouse.run();
     }
 }

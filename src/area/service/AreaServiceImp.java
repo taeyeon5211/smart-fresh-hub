@@ -102,22 +102,22 @@ public class AreaServiceImp implements AreaService{
 
     public static void main(String[] args) {
         AreaServiceImp areaServiceImp = new AreaServiceImp(new AreaRepositoryImp(),new WareHouseRepositoryImp());
-        //구역별 남은공간
-//        areaServiceImp.getAreaAll().forEach(System.out::println);
-//        // 창고별 남은공간
+//        구역별 남은공간
+        areaServiceImp.getAreaAll().forEach(System.out::println);
+//         창고별 남은공간
 //        areaServiceImp.getWarehouseInfoSpaceAll().forEach(System.out::println);
-
+//
 //        AreaDto areaDto = AreaDto.builder()
 //                .areaId(1)
 //                .storageId(1)
 //                .build();
 //        areaServiceImp.UpdateAreaTemp(areaDto);
 
-        areaServiceImp.CreateArea(AreaDto.builder()
-                            .areaSpace(1)
-                            .areaPrice(1)
-                            .warehouseId(1)
-                            .storageId(1)
-                    .build());
+//        areaServiceImp.CreateArea(AreaDto.builder()
+//                            .areaSpace(1)
+//                            .areaPrice(1)
+//                            .warehouseId(1)
+//                            .storageId(1)
+//                    .build());
     }
 }

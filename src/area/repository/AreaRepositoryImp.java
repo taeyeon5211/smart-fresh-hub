@@ -58,7 +58,7 @@ public class AreaRepositoryImp implements AreaRepository {
             while (resultSet.next()) {
                 AreaVo areaVo = new AreaVo(resultSet.getInt("area_id"),
                         resultSet.getInt("area_space"),
-                        resultSet.getString("area_name"),
+                        resultSet.getString("area_code"),
                         resultSet.getInt("area_price"),
                         resultSet.getInt("warehouse_id"),
                         resultSet.getInt("storage_id"));
