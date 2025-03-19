@@ -2,6 +2,7 @@ package login.repository;
 import login.dto.LoginReqDTO;
 import login.dto.LoginResDTO;
 import object.ObjectIo;
+import user.vo.UserType;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -37,6 +38,7 @@ public class LoginRepoImpl implements LoginRepo {
                         .userEmail(rs.getString("user_email"))
                         .userPhone(rs.getString("user_phone"))
                         .userBirthDate(rs.getDate("user_birth_date").toLocalDate())
+                        .userType(UserType.valueOf(rs.getString("user_type").toUpperCase()))
                         .userCreatedAt(LocalDateTime.parse(rs.getString("user_created_at"), formatter))
                         .build();
 
