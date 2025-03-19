@@ -21,8 +21,8 @@ public class OutboundServiceImpl implements OutboundService {
     }
 
     @Override
-    public Optional<List<OutboundDTO>> readOutboundStatus(int outboundId) {
-        return outboundRepository.readOutboundStatus(outboundId);
+    public Optional<List<OutboundDTO>> readOutboundStatus(int businessId) {
+        return outboundRepository.readOutboundStatus(businessId);
     }
 
     @Override
@@ -36,20 +36,33 @@ public class OutboundServiceImpl implements OutboundService {
     }
 
     @Override
-    public void updateRevenue() {
-        outboundRepository.updateRevenue();
+    public void updateRevenue(int businessId) {
+        outboundRepository.updateRevenue(businessId);
     }
+
+    @Override
+    public Optional<List<OutboundDTO>> readAllOutboundRequest() {
+        return outboundRepository.readAllOutboundRequest();
+    }
+
+    @Override
+    public void deleteZeroRevenue() {
+        outboundRepository.deleteZeroRevenue();
+    }
+
 
     public static void main(String[] args) {
         OutboundRepository repo = new OutboundRepositoryImpl();
         OutboundService service = new OutboundServiceImpl(repo);
         service.createOutboundRequest(new OutboundDTO().builder().outboundAmount(1).productId(2).build());
-        service.updateOutboundStatus("승인",1, LocalDateTime.now(), 11);
+        service.updateOutboundStatus("승인", 1, LocalDateTime.now(), 11);
+//
+//        Optional<List<OutboundDTO>> outboundDTOS = service.readOutboundRequest();
+//        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
+//            System.out.println(outboundDTO.toString());
+//        }
 
-        Optional<List<OutboundDTO>> outboundDTOS = service.readOutboundRequest();
-        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
-            System.out.println(outboundDTO.toString());
-        }
+
 //        Optional<List<OutboundDTO>> outboundDTOS = service.readOutboundStatus(2);
 //        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
 //            System.out.println(outboundDTO.toString());
