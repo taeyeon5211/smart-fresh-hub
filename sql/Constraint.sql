@@ -1,8 +1,4 @@
 
--- 로그인 기록 FK
-ALTER TABLE login_h_table
-    ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
-
 -- 관리자 FK
 ALTER TABLE admin_table
     ADD CONSTRAINT fk_admin_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
@@ -43,4 +39,3 @@ ALTER TABLE revenue_table
 -- 재고 히스토리 FK
 ALTER TABLE revenue_history_table
     ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
-

@@ -11,9 +11,6 @@ public class Main_Test {
         LoginService loginService = new LoginServiceImpl(loginRepo);
         LoginContImpl loginCont = new LoginContImpl(loginService);
 
-
-
-
         loginCont.inputLogin();
     }
 }

@@ -47,18 +47,11 @@ public class UserRepoImpl implements UserRepo {
             cs.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } finally {
-//            if (connection != null) {
-//                try {
-//                    connection.close();
-//                } catch (SQLException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
         }
 
         return isSuccess = true; // 성공적으로 생성되면 result
     }
+
 
 
     /**
@@ -114,24 +107,16 @@ public class UserRepoImpl implements UserRepo {
      * @return
      */
     @Override
-    public void updateUser(UserDTO user) {
-        String sql = "{CALL UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)}";
+    public void updateUser(UserVO updatedUser, int choice, String newValue) throws SQLException {
+       // 원하는 컬럼만 업데이트
+        String updateUser = "{CALL UpdateUser(?, ?, ?)}";
 
-        try {
-            cs = connection.prepareCall(sql);
-            cs.setString(1, user.getUserName());
-            cs.setString(2, user.getUserLoginId());
-            cs.setString(3, user.getUserPassword());
-            cs.setString(4, user.getUserAddress());
-            cs.setString(5, user.getUserEmail());
-            cs.setString(6, user.getUserPhone());
-            cs.setDate(7, user.getUserBirthDate() != null ? Date.valueOf(user.getUserBirthDate()) : null);
-            cs.setString(8, String.valueOf(user.getUserType()));
+        cs = connection.prepareCall(updateUser);
+        cs.setString(1, updatedUser.getUserLoginId());
+        cs.setInt(2, choice);
+        cs.setString(3, newValue);
 
-            cs.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("회원 정보 업데이트 실패: " + e.getMessage(), e);
-        }
+        cs.execute();
     }
 
     /**
@@ -153,8 +138,7 @@ public class UserRepoImpl implements UserRepo {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            // 닫아야하나?
-            ;
+
         }
         return isSuccess;
     }

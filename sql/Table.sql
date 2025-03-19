@@ -33,13 +33,6 @@ CREATE TABLE user_table (
                             user_type ENUM('admin', 'client') NOT NULL
 );
 
--- 2. 로그인 기록 테이블
-CREATE TABLE login_h_table (
-                               login_h_id INT AUTO_INCREMENT PRIMARY KEY,
-                               login_h_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-                               login_h_logout_time DATETIME,
-                               user_id INT NOT NULL
-);
 
 -- 3. 관리자 테이블
 CREATE TABLE admin_table (
@@ -154,3 +147,45 @@ CREATE TABLE revenue_history_table (
 );
 
 
+-- revenue_table에 목업 데이터 삽입 (각 area_id에 맞춰서 제품의 크기 합이 초과하지 않도록 조정)
+INSERT INTO revenue_table (revenue_amount, product_id, area_id)
+VALUES
+    (10, 1, 1),  -- Warehouse A, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 1),  -- Warehouse A, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 1),  -- Warehouse A, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
+
+    (10, 4, 2),  -- Warehouse B, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 2),  -- Warehouse B, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 2),  -- Warehouse B, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
+
+    (10, 7, 3),  -- Warehouse C, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 250)
+    (10, 8, 3),  -- Warehouse C, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 250)
+    (10, 9, 3),  -- Warehouse C, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 250)
+
+    (10, 1, 4),  -- Warehouse D, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 400)
+    (10, 2, 4),  -- Warehouse D, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 400)
+    (10, 3, 4),  -- Warehouse D, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 400)
+
+    (10, 4, 5),  -- Warehouse E, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
+    (10, 5, 5),  -- Warehouse E, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
+    (10, 6, 5),  -- Warehouse E, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
+
+    (10, 7, 6),  -- Warehouse F, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 200)
+    (10, 8, 6),  -- Warehouse F, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 200)
+    (10, 9, 6),  -- Warehouse F, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 200)
+
+    (10, 1, 7),  -- Warehouse G, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 300)
+    (10, 2, 7),  -- Warehouse G, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 300)
+    (10, 3, 7),  -- Warehouse G, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 300)
+
+    (10, 4, 8),  -- Warehouse H, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 250)
+    (10, 5, 8),  -- Warehouse H, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 250)
+    (10, 6, 8),  -- Warehouse H, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 250)
+
+    (10, 7, 9),  -- Warehouse I, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 300)
+    (10, 8, 9),  -- Warehouse I, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 300)
+    (10, 9, 9),  -- Warehouse I, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 300)
+
+    (10, 1, 10), -- Warehouse J, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
+    (10, 2, 10), -- Warehouse J, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
+    (10, 3, 10); -- Warehouse J, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)

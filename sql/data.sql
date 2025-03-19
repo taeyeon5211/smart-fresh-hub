@@ -1,4 +1,4 @@
-use wms_db;
+
 -- 유저 테이블에 10개 목업 데이터 삽입
 INSERT INTO user_table (user_login_id, user_password, user_address, user_email, user_phone, user_birth_date, user_type)
 VALUES

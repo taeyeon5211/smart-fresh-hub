@@ -26,12 +26,12 @@ public interface InboundService {
     Map<Integer, String> getAvailableProducts(int businessId);
 
     /**
-     * 특정 사업체의 입고 요청 목록을 조회한다.
-     * business_id는 입고 테이블에 없으므로 product 테이블을 JOIN하여 필터링한다.
-     * @param businessId 사업체 ID
-     * @return 해당 사업체의 입고 요청 목록
+     * 모든 입고 요청 중 '대기' 상태인 목록을 조회한다.
+     * 입고 요청 상태가 '대기'인 것만 반환한다.
+     *
+     * @return '대기' 상태의 입고 요청 리스트
      */
-    List<InboundVo> getInboundRequestsByBusiness(int businessId);
+    List<InboundHistoryDto> getAllPendingInboundList();
 
     /**
      * 입고 요청 상태를 변경한다. (승인, 취소 등)
@@ -55,5 +55,13 @@ public interface InboundService {
      * @return 해당 사업체의 입고 내역 리스트
      */
     List<InboundHistoryDto> getInboundHistoryByBusiness(int businessId);
+
+
+    /**
+     * 모든 사업체 목록을 조회하는 메서드 (관리자용).
+     *
+     * @return 등록된 모든 사업체의 (사업체 ID, 사업체명) 목록
+     */
+    Map<Integer, String> getAllBusinesses();
 }
 
