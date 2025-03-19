@@ -31,6 +31,6 @@ public class LoginContImpl implements LoginCont{
 
     @Override
     public String checkUserType(LoginResDTO loginResDto) {
-        return loginResDto.getUserType().name();
+        return loginResDto.getUserType();
     }
 }
