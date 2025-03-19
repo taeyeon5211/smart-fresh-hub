@@ -1,9 +1,6 @@
 package login.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import user.vo.UserType;
 
 import java.time.LocalDate;
@@ -12,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 public class LoginResDTO {
     // 회원 정보가 디비에 있을 경우 LoginResDTO에 담아 반환한다.
     // 이 디티오는 회원 정보가 담겨 있음
@@ -27,7 +24,6 @@ public class LoginResDTO {
     private LocalDate userBirthDate; // LocalDate 이유
     private LocalDateTime userCreatedAt; // localDateTime 이유
     private String userType;
-
 
     public LoginResDTO(String userLoginId, String userPassword, String userAddress, String userName,
                    String userEmail, String userPhone, LocalDate userBirthDate, String userType) {

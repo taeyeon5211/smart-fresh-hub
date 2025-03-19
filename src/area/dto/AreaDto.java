@@ -10,9 +10,10 @@ import lombok.Setter;
 public class AreaDto {
     private Integer areaId;
     private Integer areaSpace;
+    private String AreaCode;
     private Integer areaPrice;
     private Integer warehouseId;
-    private Integer storage_id;
+    private Integer storageId;
 
     private Integer available_space;
 
@@ -21,9 +22,10 @@ public class AreaDto {
         return "AreaDto{" +
                 "areaId=" + areaId +
                 ", areaSpace=" + areaSpace +
+                ", AreaCode='" + AreaCode + '\'' +
                 ", areaPrice=" + areaPrice +
                 ", warehouseId=" + warehouseId +
-                ", storage_id=" + storage_id +
+                ", storageId=" + storageId +
                 ", available_space=" + available_space +
                 '}';
     }

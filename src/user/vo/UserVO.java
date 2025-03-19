@@ -22,9 +22,9 @@ public class UserVO {
     private final String userPhone;
     private final LocalDate userBirthDate; // LocalDate 이유
     private final LocalDateTime userCreatedAt; // localDateTime 이유
-    private final String userType;
+    private final UserType userType;
 
-    public UserVO(Integer userId, String userLoginId, String userPassword, String userAddress, String userName, String userEmail, String userPhone, LocalDate userBirthDate, LocalDateTime userCreatedAt, String userType) {
+    public UserVO(Integer userId, String userLoginId, String userPassword, String userAddress, String userName, String userEmail, String userPhone, LocalDate userBirthDate, LocalDateTime userCreatedAt, UserType userType) {
         this.userId = userId;
         this.userLoginId = userLoginId;
         this.userPassword = userPassword;
@@ -50,7 +50,7 @@ public class UserVO {
         this.userPhone = dto.getUserPhone();
         this.userBirthDate = dto.getUserBirthDate();
         this.userCreatedAt = dto.getUserCreatedAt();
-        this.userType = String.valueOf(dto.getUserType());
+        this.userType = (dto.getUserType());
     }
 
     public Integer getUserId() {

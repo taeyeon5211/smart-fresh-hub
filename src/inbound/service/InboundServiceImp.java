@@ -1,5 +1,6 @@
 package inbound.service;
 
+
 import area.dto.AreaDto;
 import area.repository.AreaRepositoryImp;
 import area.service.AreaService;
@@ -12,6 +13,7 @@ import inbound.exception.ProductException;
 import inbound.repository.*;
 import inbound.vo.InboundHistoryVo;
 import inbound.vo.InboundVo;
+import warehouse.repository.WareHouseRepositoryImp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,7 +150,7 @@ public class InboundServiceImp implements InboundService {
         List<AreaDto> availableAreas = areaService.getAreaAll().stream()  // 모든 구역(area_table) 가져오기
                 .filter(area ->
                         area.getAvailable_space() >= (productSize * inboundAmount) && // 가용 공간이 충분한지 확인
-                                storageConditionRepository.isStorageConditionMatch(area.getStorage_id(), storageTemp) //  보관 상태가 제품 온도에 맞는지 확인
+                                storageConditionRepository.isStorageConditionMatch(area.getStorageId(), storageTemp) //  보관 상태가 제품 온도에 맞는지 확인
                 )
                 .collect(Collectors.toList()); //  조건을 만족하는 구역만 리스트로 수집
 
@@ -200,7 +202,7 @@ public class InboundServiceImp implements InboundService {
     public static void main(String[] args) {
         InboundRepository inboundRepository = new InboundRepositoryImp();
         ProductRepository productRepository = new ProductRepositoryImp();
-        AreaService areaService = new AreaServiceImp(new AreaRepositoryImp());
+        AreaService areaService = new AreaServiceImp(new AreaRepositoryImp(),new WareHouseRepositoryImp());
         StorageConditionRepository storageConditionRepository = new StorageConditionRepositoryImp();
         RevenueRepository revenueRepository = new RevenueRepositoryImp();
 

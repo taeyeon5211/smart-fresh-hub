@@ -14,16 +14,16 @@ DROP TABLE IF EXISTS user_table;
 DROP TABLE IF EXISTS area_table;
 DROP TABLE IF EXISTS warehouse_table;
 DROP TABLE IF EXISTS storage_condition;
+Drop TABLE IF EXISTS user_backup_table;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
 
 USE wms_db;
-
--- 1. 유저 테이블
 CREATE TABLE user_table (
                             user_id INT AUTO_INCREMENT PRIMARY KEY,
                             user_login_id VARCHAR(50) NOT NULL UNIQUE,
+                            user_name VARCHAR(30) NOT NULL,
                             user_password VARCHAR(255) NOT NULL,
                             user_address VARCHAR(255),
                             user_email VARCHAR(100) UNIQUE,
@@ -31,6 +31,22 @@ CREATE TABLE user_table (
                             user_birth_date DATE,
                             user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             user_type ENUM('admin', 'client') NOT NULL
+);
+
+-- 15. 회원 백업용 테이블
+CREATE TABLE user_backup_table (
+                                   backup_id INT AUTO_INCREMENT PRIMARY KEY, -- 백업 데이터의 고유 ID
+                                   user_id INT, -- 삭제된 사용자 ID
+                                   user_login_id VARCHAR(50) NOT NULL,
+                                   user_name VARCHAR(100),
+                                   user_password VARCHAR(255),
+                                   user_address VARCHAR(255),
+                                   user_email VARCHAR(100),
+                                   user_phone VARCHAR(20),
+                                   user_birth_date DATE,
+                                   user_created_at DATETIME,
+                                   user_type ENUM('admin', 'client') NOT NULL,
+                                   deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 삭제된 시간 기록
 );
 
 
@@ -111,7 +127,7 @@ CREATE TABLE warehouse_table (
 CREATE TABLE area_table (
                             area_id INT AUTO_INCREMENT PRIMARY KEY,
                             area_space INT NOT NULL,
-                            area_code CHAR(1) NOT NULL,
+                            area_code VARCHAR(50) NOT NULL,
                             area_price INT NOT NULL,
                             warehouse_id INT NOT NULL,
                             storage_id INT
@@ -148,44 +164,3 @@ CREATE TABLE revenue_history_table (
 
 
 -- revenue_table에 목업 데이터 삽입 (각 area_id에 맞춰서 제품의 크기 합이 초과하지 않도록 조정)
-INSERT INTO revenue_table (revenue_amount, product_id, area_id)
-VALUES
-    (10, 1, 1),  -- Warehouse A, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
-    (10, 2, 1),  -- Warehouse A, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
-    (10, 3, 1),  -- Warehouse A, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
-
-    (10, 4, 2),  -- Warehouse B, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
-    (10, 5, 2),  -- Warehouse B, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
-    (10, 6, 2),  -- Warehouse B, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
-
-    (10, 7, 3),  -- Warehouse C, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 250)
-    (10, 8, 3),  -- Warehouse C, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 250)
-    (10, 9, 3),  -- Warehouse C, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 250)
-
-    (10, 1, 4),  -- Warehouse D, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 400)
-    (10, 2, 4),  -- Warehouse D, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 400)
-    (10, 3, 4),  -- Warehouse D, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 400)
-
-    (10, 4, 5),  -- Warehouse E, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 300)
-    (10, 5, 5),  -- Warehouse E, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 300)
-    (10, 6, 5),  -- Warehouse E, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 300)
-
-    (10, 7, 6),  -- Warehouse F, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 200)
-    (10, 8, 6),  -- Warehouse F, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 200)
-    (10, 9, 6),  -- Warehouse F, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 200)
-
-    (10, 1, 7),  -- Warehouse G, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 300)
-    (10, 2, 7),  -- Warehouse G, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 300)
-    (10, 3, 7),  -- Warehouse G, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 300)
-
-    (10, 4, 8),  -- Warehouse H, Area A: Product 4 (size 7) * 10 = 70 (총합 70, area_space 250)
-    (10, 5, 8),  -- Warehouse H, Area B: Product 5 (size 8) * 10 = 80 (총합 150, area_space 250)
-    (10, 6, 8),  -- Warehouse H, Area C: Product 6 (size 6) * 10 = 60 (총합 210, area_space 250)
-
-    (10, 7, 9),  -- Warehouse I, Area A: Product 7 (size 4) * 10 = 40 (총합 40, area_space 300)
-    (10, 8, 9),  -- Warehouse I, Area B: Product 8 (size 3) * 10 = 30 (총합 70, area_space 300)
-    (10, 9, 9),  -- Warehouse I, Area C: Product 9 (size 2) * 10 = 20 (총합 90, area_space 300)
-
-    (10, 1, 10), -- Warehouse J, Area A: Product 1 (size 5) * 10 = 50 (총합 50, area_space 200)
-    (10, 2, 10), -- Warehouse J, Area B: Product 2 (size 3) * 10 = 30 (총합 80, area_space 200)
-    (10, 3, 10); -- Warehouse J, Area C: Product 3 (size 4) * 10 = 40 (총합 120, area_space 200)
