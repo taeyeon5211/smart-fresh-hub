@@ -60,11 +60,11 @@ public class WareHouseControllerImp implements WareHouseController {
         System.out.println(wareHouseService.getWarehouseById(warehouse_id));
     }
 
-//    public static void main(String[] args) {
-//        DiConfig diConfig = new DiConfig();
-//        diConfig.getWarehouseController().createWarehouse();
-//        diConfig.getWarehouseController().getWarehouseAll();
-//        diConfig.getWarehouseController().getWarehouseByAddress();
-//        diConfig.getWarehouseController().getWarehouseById();
-//    }
+    public static void main(String[] args) {
+        DiConfig diConfig = new DiConfig();
+        diConfig.getWarehouseController().createWarehouse();
+        diConfig.getWarehouseController().getWarehouseAll();
+        diConfig.getWarehouseController().getWarehouseByAddress();
+        diConfig.getWarehouseController().getWarehouseById();
+    }
 }

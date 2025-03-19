@@ -10,6 +10,7 @@ import inbound.service.InboundService;
 import inbound.service.InboundServiceImp;
 import inbound.service.ProductService;
 import inbound.service.ProductServiceImp;
+import warehouse.repository.WareHouseRepositoryImp;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -241,7 +242,7 @@ public class InboundControllerImp implements InboundController {
         ProductRepository productRepository = new ProductRepositoryImp();
         StorageConditionRepository storageConditionRepository = new StorageConditionRepositoryImp();
         RevenueRepository revenueRepository = new RevenueRepositoryImp();
-        AreaService areaService = new AreaServiceImp(new AreaRepositoryImp());
+        AreaService areaService = new AreaServiceImp(new AreaRepositoryImp(),new WareHouseRepositoryImp());
 
         //  Service 객체 생성
         InboundService inboundService = new InboundServiceImp(
