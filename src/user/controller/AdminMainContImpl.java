@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class AdminMainContImpl {
     private final AdminCont adminCont;
     // validcheck나중에 필요 함.
-
+    private static Scanner sc = new Scanner(System.in);
     public AdminMainContImpl(AdminCont adminCont) { // 생성될 때 총관리자 컨트롤러 주입
         this.adminCont = adminCont;
     }
@@ -16,7 +16,10 @@ public class AdminMainContImpl {
     public void start() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            printMenu();
+            checkUser(); // admin/client 반환
+
+            if(checkUser() == "admin") printMenu();
+            // if user... 추가하기
             String choice = scanner.nextLine();
 
             switch (choice) {
@@ -30,6 +33,17 @@ public class AdminMainContImpl {
                 }
                 default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
             }
+        }
+    }
+
+    private String checkUser() {
+
+        String userType;
+        while (true) {
+            System.out.print("사용자 유형을 입력하세요 (admin / client): ");
+            userType = sc.nextLine().trim().toLowerCase();
+
+            return userType;
         }
     }
 

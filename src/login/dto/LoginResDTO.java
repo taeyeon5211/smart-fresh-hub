@@ -23,10 +23,10 @@ public class LoginResDTO {
     private String userPhone;
     private LocalDate userBirthDate; // LocalDate 이유
     private LocalDateTime userCreatedAt; // localDateTime 이유
-    private UserType userType;
+    private String userType;
 
     public LoginResDTO(String userLoginId, String userPassword, String userAddress, String userName,
-                   String userEmail, String userPhone, LocalDate userBirthDate, UserType userType) {
+                   String userEmail, String userPhone, LocalDate userBirthDate, String userType) {
         this.userLoginId = userLoginId;
         this.userPassword = userPassword;
         this.userAddress = userAddress;

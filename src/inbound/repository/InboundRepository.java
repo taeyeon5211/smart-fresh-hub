@@ -7,6 +7,7 @@ import inbound.vo.InboundVo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface InboundRepository {
 
@@ -36,6 +37,15 @@ public interface InboundRepository {
          */
         List<InboundHistoryVo> findAllPendingInboundRequests();
 
+        /**
+         * 특정 입고 요청 정보를 조회하는 메서드.
+         *
+         * @param inboundId 조회할 입고 요청의 ID
+         * @return 해당 입고 요청 정보를 포함하는 Optional<InboundRequestDto>,
+         *         입고 요청이 존재하지 않으면 Optional.empty()
+         * @throws InboundException 데이터베이스 조회 중 오류가 발생한 경우
+         */
+        Optional<InboundRequestDto> getInboundById(int inboundId);
 
         /**
          * 모든 입고 내역을 조회한다.
