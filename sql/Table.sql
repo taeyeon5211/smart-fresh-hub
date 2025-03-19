@@ -154,6 +154,10 @@ CREATE TABLE user_backup_table (
                                    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 삭제된 시간 기록
 );
 
+-- 회원 백업용 FK
+ALTER TABLE user_backup_table
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
+
 -- 로그인 기록 FK
 ALTER TABLE login_h_table
     ADD CONSTRAINT fk_login_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
