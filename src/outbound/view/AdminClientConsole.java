@@ -1,4 +1,4 @@
-package inbound.view;
+package outbound.view;
 
 import area.repository.AreaRepositoryImp;
 import area.service.AreaService;
