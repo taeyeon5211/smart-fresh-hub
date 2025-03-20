@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 
-public class AdminMainContImpl {
+public class AdminMainContImpl{
     private final AdminCont adminCont;
     // validcheck나중에 필요 함.
     private static Scanner sc = new Scanner(System.in);
@@ -82,19 +82,19 @@ public class AdminMainContImpl {
         System.out.print("원하는 메뉴의 번호를 입력하세요: ");
     }
 
-    private void createUser() {
+    public void createUser() {
         adminCont.createUser();
     }
 
-    private void findUser() {
+    public void findUser() {
         adminCont.findUser();
     }
 
-    private void updateUser() throws SQLException {
+    public void updateUser() throws SQLException {
         adminCont.updateUser();
     }
 
-    private void deleteUser() {
+   public void deleteUser() {
         adminCont.deleteUser();
     }
 
