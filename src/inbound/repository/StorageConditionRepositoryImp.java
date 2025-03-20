@@ -14,6 +14,7 @@ public class StorageConditionRepositoryImp implements StorageConditionRepository
 
     @Override
     public boolean isStorageConditionMatch(int storageId, int storageTemp) {
+        // SQL 쿼리: 주어진 storage_id에 해당하는 최소/최대 온도 값을 조회
         String sql = """
             SELECT min_temp, max_temp FROM storage_condition WHERE storage_id = ?
         """;

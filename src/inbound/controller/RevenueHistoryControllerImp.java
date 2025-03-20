@@ -22,7 +22,7 @@ public class RevenueHistoryControllerImp implements RevenueHistoryController{
             List<RevenueHistoryDto> historyList = revenueHistoryService.getAllRevenueHistory();
             historyList.forEach(System.out::println);
         } catch (Exception e) {
-            System.out.println("⚠ 오류 발생: " + e.getMessage());
+            System.out.println("오류 발생: " + e.getMessage());
         }
 
     }
