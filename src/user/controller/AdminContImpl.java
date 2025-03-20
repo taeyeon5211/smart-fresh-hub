@@ -84,4 +84,8 @@ public class AdminContImpl implements AdminCont {
         String userLoginId = UserInputHelper.inputUserLoginId();
         userService.deleteUser(userLoginId);
     }
+    @Override
+    public void readClientBackUpTbl() throws SQLException {
+        userService.readClientBackUpTbl();
+    }
 }

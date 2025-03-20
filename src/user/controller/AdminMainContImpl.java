@@ -19,15 +19,17 @@ public class AdminMainContImpl {
     // 총관리자 메뉴 시작
     public void startAdminMenu() throws SQLException {
 
-        while (true) {
+
             printMenu();
-            String input = sc.nextLine().trim();
+
             while(true) {
+                String input = sc.nextLine().trim(); // 루프내에서 계속 입력 받기
                 switch (input) {
                     case "1" -> createUser();
                     case "2" -> findUser();
                     case "3" -> updateUser();
                     case "4" -> deleteUser();
+                    case "5" -> adminCont.readClientBackUpTbl();
                     case "0" -> {
                         System.out.println("프로그램을 종료합니다.");
                         System.exit(0);
@@ -35,7 +37,7 @@ public class AdminMainContImpl {
                     default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
                 }
             }
-        }
+
     }
 
     /**
@@ -65,6 +67,7 @@ public class AdminMainContImpl {
         System.out.println(" 2. 회원 조회");
         System.out.println(" 3. 회원 수정");
         System.out.println(" 4. 회원 삭제");
+        System.out.println(" 5. 샥제된 회원 모두 조회");
         System.out.println(" 0. 종료");
         System.out.println("-".repeat(30));
     }

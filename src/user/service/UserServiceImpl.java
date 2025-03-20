@@ -105,6 +105,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void readClientBackUpTbl() throws SQLException {
+        userRepo.readClientBackUpTbl();
+    }
 
     /**
      * 모든 직원을 조회하는 메소드
