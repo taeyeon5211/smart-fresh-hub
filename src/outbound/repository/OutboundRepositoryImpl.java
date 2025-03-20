@@ -18,6 +18,12 @@ public class OutboundRepositoryImpl implements OutboundRepository{
     private static final Function<OutboundDTO, OutboundVO> changeToVO = OutboundVO::new;
     private static final Function<OutboundVO, OutboundDTO> changeToDTO = OutboundDTO::new;
 
+    /**
+     * 신규 출고 요청을 생성하는 메서드.
+     * 출고 요청 시, 제품 ID와 출고 수량을 받아 `outbound_table`에 삽입한다.
+     *
+     * @param outboundDTO 출고 요청 데이터
+     */
     @Override
     public void createOutboundRequest(OutboundDTO outboundDTO) {
         String sql = "insert into outbound_table (outbound_amount, product_id) values (?, ?)";

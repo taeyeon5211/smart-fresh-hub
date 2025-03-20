@@ -12,4 +12,6 @@ public interface UserRepo {
     Boolean insertUser(UserVO userVo); //
     Boolean deleteUser(UserVO userVo);
     void updateUser(UserVO userVo, int choice, String newValue) throws SQLException;
+
+    void readClientBackUpTbl() throws SQLException;
 }

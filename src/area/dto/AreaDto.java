@@ -10,7 +10,7 @@ import lombok.Setter;
 public class AreaDto {
     private Integer areaId;
     private Integer areaSpace;
-    private String AreaCode;
+    private String areaCode;
     private Integer areaPrice;
     private Integer warehouseId;
     private Integer storageId;
@@ -19,14 +19,12 @@ public class AreaDto {
 
     @Override
     public String toString() {
-        return "AreaDto{" +
-                "areaId=" + areaId +
-                ", areaSpace=" + areaSpace +
-                ", AreaCode='" + AreaCode + '\'' +
-                ", areaPrice=" + areaPrice +
-                ", warehouseId=" + warehouseId +
-                ", storageId=" + storageId +
-                ", available_space=" + available_space +
-                '}';
+        return "areaId: " + areaId +
+                ", areaSpace: " + areaSpace +
+                ", AreaCode: " + areaCode  +
+                ", areaPrice: " + areaPrice +
+                ", warehouseId: " + warehouseId +
+                ", storageId: " + storageId +
+                ", available_space: " + available_space;
     }
 }

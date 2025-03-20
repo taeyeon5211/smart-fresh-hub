@@ -29,12 +29,10 @@ public class WareHouseDto {
 
     @Override
     public String toString() {
-        return "WareHouseDto{" +
-                "warehouseId=" + warehouseId +
-                ", warehouseName='" + warehouseName + '\'' +
-                ", warehouseSpace=" + warehouseSpace +
-                ", warehouseAddress='" + warehouseAddress + '\'' +
-                ", warehouseAmount=" + warehouseAmount +
-                '}';
+        return "warehouseId: " + warehouseId +
+                ", warehouseName: " + warehouseName +
+                ", warehouseSpace: " + warehouseSpace +
+                ", warehouseAddress: " + warehouseAddress +
+                ", warehouseAmount: " + warehouseAmount;
     }
 }

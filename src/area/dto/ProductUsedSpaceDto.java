@@ -18,9 +18,7 @@ public class ProductUsedSpaceDto {
 
     @Override
     public String toString() {
-        return "ProductUsedSpaceVo{" +
-                "warehouseId=" + areaId +
-                ", areaUsedSpace=" + areaUsedSpace +
-                '}';
+        return "warehouseId=" + areaId +
+                ", areaUsedSpace: " + areaUsedSpace;
     }
 }

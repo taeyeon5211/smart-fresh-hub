@@ -54,17 +54,7 @@ public class WareHouseControllerImp implements WareHouseController {
     }
 
     @Override
-    public void getWarehouseById() {
-        System.out.println("창고 아이디 입력");
-        Integer warehouse_id = sc.nextInt();
+    public void getWarehouseById(Integer warehouse_id) {
         System.out.println(wareHouseService.getWarehouseById(warehouse_id));
-    }
-
-    public static void main(String[] args) {
-        DiConfig diConfig = new DiConfig();
-        diConfig.getWarehouseController().createWarehouse();
-        diConfig.getWarehouseController().getWarehouseAll();
-        diConfig.getWarehouseController().getWarehouseByAddress();
-        diConfig.getWarehouseController().getWarehouseById();
     }
 }
