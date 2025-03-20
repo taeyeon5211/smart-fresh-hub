@@ -27,9 +27,7 @@ public class AdminMainTest {
         UserService userService = new UserServiceImpl(userRepo);
         AdminCont adminCont = new AdminContImpl(userService, loginCont);
 
-
-        AdminMainContImpl adminMainCont = new AdminMainContImpl(adminCont);
-        adminMainCont.startAdminMenu();
+        adminCont.startAdminMenu();
 
 
     }
