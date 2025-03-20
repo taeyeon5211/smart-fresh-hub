@@ -1,8 +1,9 @@
-package inbound.controller;
+package inbound.view;
 
 import area.repository.AreaRepositoryImp;
 import area.service.AreaService;
 import area.service.AreaServiceImp;
+import inbound.controller.*;
 import inbound.repository.*;
 import inbound.service.*;
 import warehouse.repository.WareHouseRepositoryImp;
