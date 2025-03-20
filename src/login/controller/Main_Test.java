@@ -29,8 +29,6 @@ public class Main_Test {
         loginCont = new LoginContImpl(loginService, userService);
         // 로그인 시작
         String input = loginCont.startLoginPage();
-
-
         if(input.equals("1")){
             LoginResDTO loginResDto = loginCont.inputLogin();
             String userType = loginCont.checkUserType(loginResDto);
