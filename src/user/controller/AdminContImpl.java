@@ -1,4 +1,5 @@
 package user.controller;
+import auth.Auth;
 import login.controller.LoginCont;
 import login.dto.LoginResDTO;
 import user.dto.UserDTO;
@@ -136,15 +137,16 @@ public class AdminContImpl implements AdminCont {
      * 일반 회원의 메뉴를 시작하는 메서드
      * @param loginedUser 로그인 후 반환된 LoginResDTO
      */
-    public void startClientMenu(LoginResDTO loginedUser){
+    public void startClientMenu(){
+        Auth auth = Auth.getinstance();
         printClientMenu();
         int choice = sc.nextInt();
 
 
         switch (choice) {
-            case 1 -> readMyAccount(loginedUser);
-            case 2 -> updateMyAccount(loginedUser);
-            case 3 -> deleteMyAccount(loginedUser);
+            case 1 -> readMyAccount(auth.getLoginResDto());
+            case 2 -> updateMyAccount(auth.getLoginResDto());
+            case 3 -> deleteMyAccount(auth.getLoginResDto());
             case 4 -> loginCont.startLoginPage();
             default -> System.out.println("잘못된 입력입니다. 다시 선택하세요.");
         }

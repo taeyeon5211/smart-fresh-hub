@@ -3,7 +3,7 @@ import login.dto.LoginResDTO;
 
 
 public interface LoginCont {
-    LoginResDTO inputLogin();
+    void inputLogin();
     String checkUserType(LoginResDTO loginResDto);
     String startLoginPage();
     void createNewAccount();
