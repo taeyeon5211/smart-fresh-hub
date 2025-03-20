@@ -7,17 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OutboundController {
-    void createOutboundRequest(OutboundDTO outboundDTO);
+    void createOutboundRequest();
 
-    Optional<List<OutboundDTO>> readOutboundStatus(int outboundId);
+    void readOutboundStatus();
 
-    Optional<List<OutboundDTO>> readOutboundRequest();
+    void readOutboundRequest();
 
-    void updateOutboundStatus(String newStatus, int adminId, LocalDateTime outboundDate, int outboundId);
+    void updateOutboundStatus();
 
-    void updateRevenue(int businessId);
-
-    Optional<List<OutboundDTO>> readAllOutboundRequest();
-
-    void deleteZeroRevenue();
+    void readAllOutboundRequest();
 }
