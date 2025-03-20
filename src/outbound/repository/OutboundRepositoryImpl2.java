@@ -18,7 +18,7 @@ import java.util.function.Function;
  * 출고(Outbound) 관련 데이터 처리를 담당하는 Repository 구현체.
  * 출고 요청 생성, 조회, 상태 업데이트, 재고 반영 기능을 포함한다.
  */
-public class OutboundRepositoryImpl implements OutboundRepository {
+public class OutboundRepositoryImpl2 implements OutboundRepository {
 
     // DTO ↔ VO 변환을 위한 Function 객체
     private static final Function<OutboundDTO, OutboundVO> changeToVO = OutboundVO::new;
@@ -144,31 +144,71 @@ public class OutboundRepositoryImpl implements OutboundRepository {
         }
     }
 
+
     /**
      * 승인된 출고 요청을 반영하여 재고를 감소시키는 메서드.
-     * `outbound_table`에서 승인된 출고 요청을 확인하고, `revenue_table`에서 해당 제품의 재고를 감소시킨다.
-     *
-     * - 출고 승인된 제품의 재고를 감소
-     * - 재고가 0 이하가 되면 삭제하는 추가 처리 필요
+     * @param outboundId 출고 요청 ID
      */
     @Override
-    public void updateRevenue(int businessId) {
-        String sql = "UPDATE revenue_table r" +
-                " JOIN product p ON r.product_id = p.product_id" +
-                " JOIN outbound_table o ON o.product_id = p.product_id" +
-                " SET r.revenue_amount = r.revenue_amount - o.outbound_amount" +
-                " WHERE o.outbound_status = '승인'" +
-                " AND p.business_id = ?" +
-                " AND r.revenue_amount >= o.outbound_amount";
+    public void updateRevenue(int outboundId) {
+        try (Connection conn = ObjectIo.getConnection()) {
+            int productId;
+            int outboundAmount;
+            int currentStock = 0;
 
-        try (Connection conn = ObjectIo.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, businessId);
-            pstmt.executeUpdate();
+            // 1. 출고 요청에서 product_id 및 출고량 가져오기
+            try (PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT product_id, outbound_amount FROM outbound_table WHERE outbound_id = ?")) {
+                pstmt.setInt(1, outboundId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        productId = rs.getInt("product_id");
+                        outboundAmount = rs.getInt("outbound_amount");
+                    } else {
+                        throw new RuntimeException("출고 요청을 찾을 수 없습니다.");
+                    }
+                }
+            }
+
+            // 2. 현재 재고 확인
+            try (PreparedStatement pstmt = conn.prepareStatement(
+                    "SELECT SUM(revenue_amount) FROM revenue_table WHERE product_id = ?")) {
+                pstmt.setInt(1, productId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        currentStock = rs.getInt(1); // 현재 재고량
+                    }
+                }
+            }
+
+            // 3. 재고가 부족하면 출고 불가능하도록 예외 발생
+            if (outboundAmount > currentStock) {
+                throw new RuntimeException("출고 승인 불가: 재고 부족 (현재 재고: " + currentStock + ", 요청 출고량: " + outboundAmount + ")");
+            }
+
+            // 4. 재고 감소 처리
+            try (PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE revenue_table SET revenue_amount = revenue_amount - ? WHERE product_id = ? AND revenue_amount >= ? LIMIT 1")) {
+                pstmt.setInt(1, outboundAmount);
+                pstmt.setInt(2, productId);
+                pstmt.setInt(3, outboundAmount);
+                int affectedRows = pstmt.executeUpdate();
+
+                if (affectedRows > 0) {
+                    System.out.println("재고 감소 완료: " + affectedRows + "건 업데이트됨");
+                } else {
+                    throw new RuntimeException("출고 승인 불가: 해당 제품의 재고가 부족하거나 데이터 오류 발생");
+                }
+            }
+
+            // 5. 재고가 0이면 삭제
+            deleteZeroRevenue();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("출고 승인 후 재고 감소 처리 중 오류 발생", e);
         }
     }
+
+
 
     //출고요청 전체조회
     @Override
@@ -211,12 +251,8 @@ public class OutboundRepositoryImpl implements OutboundRepository {
 
 
     public static void main(String[] args) {
-        OutboundRepositoryImpl outboundRepository = new OutboundRepositoryImpl();
+        OutboundRepositoryImpl2 outboundRepository = new OutboundRepositoryImpl2();
 
-        // 출고 요청 목록 조회 테스트
-        Optional<List<OutboundDTO>> outboundDTOS = outboundRepository.readOutboundRequest();
-        for (OutboundDTO outboundDTO : outboundDTOS.orElse(new ArrayList<>())) {
-            System.out.println(outboundDTO.toString());
-        }
+        outboundRepository.updateRevenue(1);
     }
 }

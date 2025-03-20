@@ -1,5 +1,6 @@
 package user.service;
 
+import user.controller.AdminCont;
 import user.controller.UserInputHelper;
 import user.dto.UserDTO;
 import user.repository.UserRepo;
@@ -15,8 +16,10 @@ public class UserServiceImpl implements UserService {
     // repo
     private final UserRepo userRepo;
 
+
     public UserServiceImpl(UserRepo userRepo) {
         this.userRepo = userRepo;
+
     }
 
     // 생성자 이용 dto변환
@@ -37,6 +40,13 @@ public class UserServiceImpl implements UserService {
         System.out.println("회원 아이디 " + userVo.getUserLoginId()+ " 를 생성하였습니다. ");
     }
 
+    public void createNewAccount() {
+      UserDTO newUser = UserInputHelper.getDtoFromUserInfo();
+      UserVO userVo = new UserVO(newUser);
+        userRepo.insertUser(userVo); // repo를 불러 vo를 디비에 저장.
+        System.out.println("회원 아이디 " + userVo.getUserLoginId()+ " 를 생성하였습니다. ");
+    }
+
     @Override
     public Boolean deleteUser(String userLoginId) {
         UserVO foundUser = userRepo.findUser(userLoginId);
@@ -45,9 +55,10 @@ public class UserServiceImpl implements UserService {
             // 삭제하기
             userRepo.deleteUser(foundUser);
             System.out.println("회원 아이디 " + userLoginId + " 를 시스템에서 삭제했습니다.");
+            return true;
+        } else {
+            return null;
         }
-
-        return null;
     }
 
 
@@ -98,6 +109,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void readClientBackUpTbl() throws SQLException {
+        userRepo.readClientBackUpTbl();
+    }
 
     /**
      * 모든 직원을 조회하는 메소드

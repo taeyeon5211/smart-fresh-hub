@@ -12,5 +12,7 @@ public interface UserService {
    Boolean deleteUser(String userLoginId); //
    void updateUser(UserDTO userDTO, int choice) throws SQLException;
    UserDTO findUser(String userLoginId);
+    void createNewAccount();
    List<UserDTO> findAllUsers();
+   void readClientBackUpTbl() throws SQLException;
 }

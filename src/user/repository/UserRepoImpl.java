@@ -1,8 +1,6 @@
 package user.repository;
 
 import object.ObjectIo;
-import user.dto.UserDTO;
-import user.dto.UserDTO;
 import user.vo.UserVO;
 
 import java.sql.*;
@@ -52,7 +50,6 @@ public class UserRepoImpl implements UserRepo {
 
         return isSuccess = true; // 성공적으로 생성되면 result
     }
-
 
 
     /**
@@ -110,7 +107,7 @@ public class UserRepoImpl implements UserRepo {
      */
     @Override
     public void updateUser(UserVO updatedUser, int choice, String newValue) throws SQLException {
-       // 원하는 컬럼만 업데이트
+        // 원하는 컬럼만 업데이트
         String updateUser = "{CALL UpdateUser(?, ?, ?)}";
 
         cs = connection.prepareCall(updateUser);
@@ -143,5 +140,32 @@ public class UserRepoImpl implements UserRepo {
 
         }
         return isSuccess;
+    }
+
+    @Override
+    public void readClientBackUpTbl()  {
+        String query = "SELECT * FROM user_backup_table backup JOIN user_table u on backup.user_id = u.user_id";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            rs = pstmt.executeQuery();
+
+            {
+                System.out.println("===== 사용자 목록 =====");
+                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "ID", "로그인 ID", "이름", "이메일", "계정 생성일" , "계정 삭제일");
+                System.out.println("--------------------------------------------------------------");
+
+                    while (rs.next()) {
+                        String userLoginId = rs.getString("user_login_id");
+                        String userName = rs.getString("user_name");
+                        String userEmail = rs.getString("user_email");
+                        String createdAt = rs.getString("user_created_at");
+                        String deletedAt = rs.getString("user_deleted_at");
+
+                        System.out.printf("%-15s %-15s %-25s %-15s%n %-15s%n",userLoginId, userName, userEmail, createdAt, deletedAt);
+                    }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

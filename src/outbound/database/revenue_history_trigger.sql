@@ -19,10 +19,15 @@ BEGIN
 
         -- revenue_history_table에 출고 정보를 삽입
         INSERT INTO revenue_history_table (revenue_id, change_date, revenue_quantity, change_type)
-        VALUES (revenue_id, NOW(), -NEW.outbound_amount, '출고');
+        VALUES (revenue_id, NOW(), NEW.outbound_amount, '출고');
     END IF;
 END$$
 
 DELIMITER ;
 
 select * from outbound_table;
+select * from outbound_table;
+update outbound_table set outbound_status = '승인' where outbound_id = 8; -- 9
+select * from revenue_table;
+
+show triggers ;

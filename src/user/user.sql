@@ -112,3 +112,4 @@ BEGIN
     VALUES (OLD.user_id, OLD.user_login_id, OLD.user_name, OLD.user_password, OLD.user_address,
             OLD.user_email, OLD.user_phone, OLD.user_birth_date, OLD.user_created_at, OLD.user_type, NOW());
 END;
+
