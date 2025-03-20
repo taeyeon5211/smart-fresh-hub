@@ -6,5 +6,5 @@ public interface WareHouseController {
     void createWarehouse();
     void getWarehouseAll();
     void getWarehouseByAddress();
-    void getWarehouseById();
+    void getWarehouseById(Integer warehouse_id);
 }
