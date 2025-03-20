@@ -36,7 +36,7 @@ public class LoginContImpl implements LoginCont{
         String input = sc.nextLine().trim();
 
         if (input.equals("1")) {
-            startLoginPage();
+            inputLogin();
         } else if (input.equals("2")) {
             createNewAccount();
         }

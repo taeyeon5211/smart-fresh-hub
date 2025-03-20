@@ -57,8 +57,10 @@ public class UserServiceImpl implements UserService {
             System.out.println("회원 아이디 " + userLoginId + " 를 시스템에서 삭제했습니다.");
             return true;
         } else {
-            return null;
+            throw new IllegalArgumentException("해당회원이 존재하지 않습니다.");
         }
+
+
     }
 
 

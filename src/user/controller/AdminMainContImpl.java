@@ -94,7 +94,7 @@ public class AdminMainContImpl{
         adminCont.updateUser();
     }
 
-   public void deleteUser() {
+   public void deleteUser() throws SQLException {
         adminCont.deleteUser();
     }
 
