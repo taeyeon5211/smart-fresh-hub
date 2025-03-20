@@ -22,9 +22,9 @@ public class Main_Test {
 
         UserRepo userRepo = new UserRepoImpl();
         UserService userService = new UserServiceImpl(userRepo);
-        AdminCont adminCont = new AdminContImpl(userService);
+        AdminCont adminCont = new AdminContImpl(userService, loginCont);
 
-        AdminMainContImpl adminMainCont = new AdminMainContImpl(adminCont);
+
 
         loginCont = new LoginContImpl(loginService, userService);
         // 로그인 시작
@@ -39,9 +39,9 @@ public class Main_Test {
                 System.out.println(loginResDto.getUserLoginId() + " 사용자 확인되었습니다. " + userType + " 유형입니다. " + userType + " 전용 메뉴 시작합니다. ");
                 if (userType.equals("ADMIN")) {
                     // 총관리자 가 할 수 있는 기능 시작
-                    adminMainCont.startAdminMenu();
+                    adminCont.startAdminMenu();
                 } else {
-                    adminMainCont.startClientMenu(loginResDto);
+                    adminCont.startClientMenu(loginResDto);
                 }
         }
 

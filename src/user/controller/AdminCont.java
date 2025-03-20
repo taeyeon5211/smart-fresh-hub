@@ -9,7 +9,7 @@ public interface AdminCont {
     void createUser();
     void findUser();
     void updateUser() throws SQLException;
-    void deleteUser();
+    void deleteUser() throws SQLException;
 
     void readMyAccount(LoginResDTO loginedUser);
 
@@ -18,5 +18,6 @@ public interface AdminCont {
     void deleteMyAccount(LoginResDTO loginedUser);
     void readClientBackUpTbl() throws SQLException;
 
-
+    void startAdminMenu() throws SQLException;
+    void startClientMenu(LoginResDTO loginResDto) throws SQLException;
 }
