@@ -1,6 +1,7 @@
 package inbound.controller;
 
 import inbound.dto.ProductDto;
+import inbound.exception.ProductException;
 import inbound.repository.ProductRepository;
 import inbound.repository.ProductRepositoryImp;
 import inbound.service.ProductService;
@@ -36,7 +37,7 @@ public class ProductControllerImp implements ProductController {
             System.out.println("⚠ 등록된 카테고리가 없습니다.");
             return;
         }
-        System.out.println("\n📌 [등록된 카테고리 목록]");
+        System.out.println("\n [등록된 카테고리 목록]");
         categories.forEach((id, name) -> System.out.println(" - " + id + ": " + name));
         printSeparator();
     }
@@ -54,15 +55,13 @@ public class ProductControllerImp implements ProductController {
             System.out.print("제품명: ");
             String productName = scanner.nextLine();
             if (productName.trim().isEmpty()) {
-                throw new IllegalArgumentException(" 제품명은 비워둘 수 없습니다.");
+                throw new IllegalArgumentException("제품명은 비워둘 수 없습니다.");
             }
 
             int productSize = getValidIntInput("제품 크기(m²): ", 1, Integer.MAX_VALUE);
             int categoryMidId = getValidIntInput("카테고리 ID: ", 1, Integer.MAX_VALUE);
-            int storageTemperature = getValidIntInput(" 보관 온도(℃): ", -100, 100); // 보관 온도 범위 (-100~100)
-
-            LocalDate expirationDate = getValidExpirationDate(); // 유통기한 입력
-
+            int storageTemperature = getValidIntInput("보관 온도(℃): ", -100, 100); // 보관 온도 범위 (-100~100)
+            LocalDate expirationDate = getValidExpirationDate();
             int businessId = getValidIntInput("사업체 ID: ", 1, Integer.MAX_VALUE);
 
             // DTO 객체 생성
@@ -79,17 +78,16 @@ public class ProductControllerImp implements ProductController {
             int productId = productService.registerProduct(productDto);
 
             // 결과 출력
-            if (productId > 0) {
-                printSuccessMessage(" 제품 등록 성공! 등록된 제품 ID: " + productId);
-            } else {
-                printErrorMessage("제품 등록 실패");
-            }
+            printSuccessMessage("제품 등록 성공! 등록된 제품 ID: " + productId);
         } catch (IllegalArgumentException e) {
             printErrorMessage(e.getMessage()); // 입력값 유효성 검사 예외 처리
+        } catch (ProductException e) {
+            printErrorMessage("제품 등록 실패: " + e.getMessage()); // 서비스 계층에서 던진 예외 처리
         } catch (Exception e) {
-            printErrorMessage(" 알 수 없는 오류 발생: " + e.getMessage()); // 기타 예외 처리
+            printErrorMessage("알 수 없는 오류 발생: " + e.getMessage()); // 기타 예외 처리
         }
     }
+
 
 
 
@@ -108,12 +106,12 @@ public class ProductControllerImp implements ProductController {
                 int value = scanner.nextInt();
                 scanner.nextLine(); // 버퍼 비우기
                 if (value < min || value > max) {
-                    throw new IllegalArgumentException("⚠ 입력값이 유효한 범위를 벗어났습니다. (" + min + " ~ " + max + ")");
+                    throw new IllegalArgumentException("입력값이 유효한 범위를 벗어났습니다. (" + min + " ~ " + max + ")");
                 }
                 return value;
             } catch (InputMismatchException e) {
                 scanner.nextLine(); // 잘못된 입력 처리 후 버퍼 비우기
-                System.out.println("⚠ 숫자로 입력해주세요.");
+                System.out.println("숫자로 입력해주세요.");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
