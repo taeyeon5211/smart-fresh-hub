@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param
      */
-    public void updateUser(UserDTO updatedUser, int choice) throws SQLException {
+    public void updateUser(UserDTO updatedUser, int choice){
         UserVO userVo = new UserVO(updatedUser);
 
             switch (choice) {
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void readClientBackUpTbl() throws SQLException {
+    public void readClientBackUpTbl() {
         userRepo.readClientBackUpTbl();
     }
 

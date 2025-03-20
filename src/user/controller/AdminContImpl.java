@@ -1,4 +1,5 @@
 package user.controller;
+import auth.Auth;
 import login.controller.LoginCont;
 import login.dto.LoginResDTO;
 import user.dto.UserDTO;
@@ -38,7 +39,7 @@ public class AdminContImpl implements AdminCont {
     }
 
     @Override
-    public void updateMyAccount(LoginResDTO loginedUser) throws SQLException {
+    public void updateMyAccount(LoginResDTO loginedUser) {
         System.out.println("===== 회원 정보 수정 메뉴 =====");
         System.out.println("1. 비밀번호 변경");
         System.out.println("2. 주소 변경");
@@ -62,7 +63,7 @@ public class AdminContImpl implements AdminCont {
     }
 
     @Override
-    public void updateUser() throws SQLException {
+    public void updateUser(){
         String userLoginId = UserInputHelper.inputUserLoginId();
 
         System.out.println("===== 회원 정보 수정 메뉴 =====");
@@ -84,7 +85,7 @@ public class AdminContImpl implements AdminCont {
     }
 
     @Override
-    public void deleteUser() throws SQLException {
+    public void deleteUser(){
 
             System.out.println("삭제할 회원의 아이디를 입력하세요: ");
             String userLoginId = sc.nextLine().trim();
@@ -99,7 +100,7 @@ public class AdminContImpl implements AdminCont {
     }
 
     @Override
-    public void readClientBackUpTbl() throws SQLException {
+    public void readClientBackUpTbl(){
         userService.readClientBackUpTbl();
     }
 
@@ -116,12 +117,8 @@ public class AdminContImpl implements AdminCont {
         System.out.println(" 0. 종료");
         System.out.println("-".repeat(30));
     }
-    public void startAdminMenu() throws SQLException {
-
-
-        printMenu();
-
-        while(true) {
+    public void startAdminMenu() {
+            printMenu();
             String input = sc.nextLine().trim(); // 루프내에서 계속 입력 받기
             switch (input) {
                 case "1" -> createUser();
@@ -130,27 +127,26 @@ public class AdminContImpl implements AdminCont {
                 case "4" -> deleteUser();
                 case "5" -> readClientBackUpTbl();
                 case "0" -> {
-                    System.out.println("프로그램을 종료합니다.");
-                    System.exit(0);
+                    System.out.println("회원관리를 종료합니다.");
                 }
                 default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
             }
-        }
-
     }
 
     /**
      * 일반 회원의 메뉴를 시작하는 메서드
      * @param loginedUser 로그인 후 반환된 LoginResDTO
      */
-    public void startClientMenu(LoginResDTO loginedUser) throws SQLException {
+    public void startClientMenu(){
+        Auth auth = Auth.getinstance();
         printClientMenu();
         int choice = sc.nextInt();
 
+
         switch (choice) {
-            case 1 -> readMyAccount(loginedUser);
-            case 2 -> updateMyAccount(loginedUser);
-            case 3 -> deleteMyAccount(loginedUser);
+            case 1 -> readMyAccount(auth.getLoginResDto());
+            case 2 -> updateMyAccount(auth.getLoginResDto());
+            case 3 -> deleteMyAccount(auth.getLoginResDto());
             case 4 -> loginCont.startLoginPage();
             default -> System.out.println("잘못된 입력입니다. 다시 선택하세요.");
         }

@@ -8,16 +8,16 @@ import java.sql.SQLException;
 public interface AdminCont {
     void createUser();
     void findUser();
-    void updateUser() throws SQLException;
-    void deleteUser() throws SQLException;
+    void updateUser();
+    void deleteUser();
 
     void readMyAccount(LoginResDTO loginedUser);
 
-    void updateMyAccount(LoginResDTO loginedUser) throws SQLException;
+    void updateMyAccount(LoginResDTO loginedUser);
 
     void deleteMyAccount(LoginResDTO loginedUser);
-    void readClientBackUpTbl() throws SQLException;
+    void readClientBackUpTbl();
 
-    void startAdminMenu() throws SQLException;
-    void startClientMenu(LoginResDTO loginResDto) throws SQLException;
+    void startAdminMenu();
+    void startClientMenu();
 }

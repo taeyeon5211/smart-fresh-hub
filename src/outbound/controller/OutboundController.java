@@ -16,4 +16,8 @@ public interface OutboundController {
     void updateOutboundStatus();
 
     void readAllOutboundRequest();
+
+    public void printAdminMenu();
+
+    public void printMemberMenu();
 }

@@ -3,7 +3,6 @@ package outbound.service;
 import outbound.dto.OutboundDTO;
 import outbound.repository.OutboundRepository;
 import outbound.repository.OutboundRepositoryImpl;
-import outbound.repository.OutboundRepositoryImpl2;
 
 import java.time.LocalDateTime;
 import java.util.List;

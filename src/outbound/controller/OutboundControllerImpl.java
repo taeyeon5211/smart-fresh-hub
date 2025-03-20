@@ -93,52 +93,9 @@ public class OutboundControllerImpl implements OutboundController {
         }
     }
 
-    public static void adminMenu() {
-        OutboundController outboundController = new OutboundControllerImpl(new OutboundServiceImpl(new OutboundRepositoryImpl()));
 
-        while (true) {
-            printAdminMenu();
-            System.out.print("선택 : ");
-            String choice = scanner.nextLine();
 
-            switch (choice) {
-                case "1" -> outboundController.readAllOutboundRequest();
-                case "2" -> outboundController.readOutboundRequest();
-                case "3" -> outboundController.updateOutboundStatus();
-                case "0" -> {
-                    System.out.println("프로그램 종료");
-                    return;
-                }
-            }
-        }
-    }
 
-    public static void memberMenu() {
-        OutboundController outboundController = new OutboundControllerImpl(new OutboundServiceImpl(new OutboundRepositoryImpl()));
-
-        while (true) {
-            printMemberMenu();
-            System.out.print("선택 : ");
-            String choice = scanner.nextLine();
-
-            switch (choice) {
-                case "1" -> outboundController.createOutboundRequest();
-                case "2" -> outboundController.readOutboundStatus();
-                case "0" -> {
-                    System.out.println("프로그램 종료");
-                    return;
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        //OutboundRepository outboundRepository = new OutboundRepositoryImpl();
-        //OutboundService outboundService = new OutboundServiceImpl(outboundRepository);
-        //OutboundController outboundController = new OutboundControllerImpl(outboundService);
-        adminMenu();
-        memberMenu();
-    }
 
     private LocalDateTime getValidLocalDateTimeInput(String message) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -153,7 +110,8 @@ public class OutboundControllerImpl implements OutboundController {
         }
     }
 
-    private static void printAdminMenu() {
+    @Override
+    public void printAdminMenu() {
         System.out.println("========================");
         System.out.println("[출고 기능]");
         System.out.println("- 관리자 메뉴");
@@ -165,7 +123,8 @@ public class OutboundControllerImpl implements OutboundController {
 
     }
 
-    private static void printMemberMenu() {
+    @Override
+    public void printMemberMenu() {
         System.out.println("========================");
         System.out.println("[출고 기능]");
         System.out.println("- 회원 메뉴");
