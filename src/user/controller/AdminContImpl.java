@@ -81,11 +81,15 @@ public class AdminContImpl implements AdminCont {
 
     @Override
     public void deleteUser() {
-        String userLoginId = UserInputHelper.inputUserLoginId();
-        userService.deleteUser(userLoginId);
+
+            System.out.println("삭제할 회원의 아이디를 입력하세요: ");
+            String userLoginId = sc.nextLine().trim();
+           userService.deleteUser(userLoginId);
     }
+
     @Override
     public void readClientBackUpTbl() throws SQLException {
         userService.readClientBackUpTbl();
     }
+
 }

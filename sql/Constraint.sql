@@ -39,3 +39,7 @@ ALTER TABLE revenue_table
 -- 재고 히스토리 FK
 ALTER TABLE revenue_history_table
     ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
+
+-- 회원 삭제 백업 테이블 FK
+ALTER TABLE user_backup_table
+    ADD CONSTRAINT fk_backup_user_id FOREIGN KEY (user_id) REFERENCES user_table (user_id);
