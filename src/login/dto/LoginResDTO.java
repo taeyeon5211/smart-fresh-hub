@@ -37,5 +37,26 @@ public class LoginResDTO {
         this.userType = userType;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                """
+                ==============================
+                회원 정보
+                ------------------------------
+                로그인 ID    : %s
+                주소         : %s
+                이름         : %s
+                이메일       : %s
+                전화번호     : %s
+                생년월일     : %s
+                가입일       : %s
+                사용자 유형  : %s
+                ==============================
+                """,
+                 userLoginId, userAddress, userName,
+                userEmail, userPhone, userBirthDate, userCreatedAt, userType
+        );
+    }
 
 }

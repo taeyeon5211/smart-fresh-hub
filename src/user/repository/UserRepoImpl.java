@@ -1,8 +1,6 @@
 package user.repository;
 
 import object.ObjectIo;
-import user.dto.UserDTO;
-import user.dto.UserDTO;
 import user.vo.UserVO;
 
 import java.sql.*;
@@ -52,7 +50,6 @@ public class UserRepoImpl implements UserRepo {
 
         return isSuccess = true; // 성공적으로 생성되면 result
     }
-
 
 
     /**
@@ -110,7 +107,7 @@ public class UserRepoImpl implements UserRepo {
      */
     @Override
     public void updateUser(UserVO updatedUser, int choice, String newValue) throws SQLException {
-       // 원하는 컬럼만 업데이트
+        // 원하는 컬럼만 업데이트
         String updateUser = "{CALL UpdateUser(?, ?, ?)}";
 
         cs = connection.prepareCall(updateUser);
@@ -143,5 +140,32 @@ public class UserRepoImpl implements UserRepo {
 
         }
         return isSuccess;
+    }
+
+    @Override
+    public void readClientBackUpTbl()  {
+        String query = "SELECT * FROM user_backup_table";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            rs = pstmt.executeQuery();
+
+            {
+                System.out.println("===== 사용자 목록 =====");
+                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "ID", "로그인 ID", "이름", "이메일", "전화번호");
+                System.out.println("--------------------------------------------------------------");
+
+                    while (rs.next()) {
+                        int userId = rs.getInt("user_id");
+                        String userLoginId = rs.getString("user_login_id");
+                        String userName = rs.getString("user_name");
+                        String userEmail = rs.getString("user_email");
+                        String userPhone = rs.getString("user_phone");
+
+                        System.out.printf("%-10d %-15s %-15s %-25s %-15s%n", userId, userLoginId, userName, userEmail, userPhone);
+                    }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
