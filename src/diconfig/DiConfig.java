@@ -6,11 +6,9 @@ import area.repository.AreaRepository;
 import area.repository.AreaRepositoryImp;
 import area.service.AreaService;
 import area.service.AreaServiceImp;
-import inbound.controller.InboundController;
-import inbound.controller.InboundControllerImp;
+import inbound.controller.*;
 import inbound.repository.*;
-import inbound.service.InboundService;
-import inbound.service.InboundServiceImp;
+import inbound.service.*;
 import login.controller.LoginCont;
 import login.controller.LoginContImpl;
 import login.repository.LoginRepo;
@@ -23,6 +21,8 @@ import outbound.repository.OutboundRepository;
 import outbound.repository.OutboundRepositoryImpl;
 import outbound.service.OutboundService;
 import outbound.service.OutboundServiceImpl;
+import user.controller.AdminCont;
+import user.controller.AdminContImpl;
 import user.repository.UserRepo;
 import user.repository.UserRepoImpl;
 import user.service.UserService;
@@ -116,4 +116,43 @@ public class DiConfig {
     public LoginCont getLoginController() {
         return new LoginContImpl(getLoginService());
     }
+
+    //user Di
+
+    public UserRepo getUserRepository() {
+        return new UserRepoImpl();
+    }
+    public UserService getUserService() {
+        return new UserServiceImpl(getUserRepository());
+    }
+    public AdminCont getAdminController() {
+        return new AdminContImpl(getUserService(),getLoginController());
+    }
+
+    //protect Di
+    public ProductRepository productRepository() {
+        return new ProductRepositoryImp();
+    }
+
+    public ProductService getProductService() {
+        return new ProductServiceImp(getProductRepository());
+    }
+
+    public ProductController getProductController() {
+        return new ProductControllerImp(getProductService());
+    }
+
+    //revenue Di
+
+    public RevenueRepository revenueRepository() {
+        return new RevenueRepositoryImp();
+    }
+    public RevenueHistoryService getRevenueHistoryService() {
+        return new RevenueHistoryServiceImp(getRevenueRepository());
+    }
+
+    public RevenueHistoryController getRevenueHistoryController() {
+        return new RevenueHistoryControllerImp(getRevenueHistoryService());
+    }
+
 }

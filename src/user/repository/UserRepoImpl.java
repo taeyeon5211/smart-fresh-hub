@@ -106,16 +106,20 @@ public class UserRepoImpl implements UserRepo {
      * @return
      */
     @Override
-    public void updateUser(UserVO updatedUser, int choice, String newValue) throws SQLException {
+    public void updateUser(UserVO updatedUser, int choice, String newValue){
         // 원하는 컬럼만 업데이트
         String updateUser = "{CALL UpdateUser(?, ?, ?)}";
 
-        cs = connection.prepareCall(updateUser);
-        cs.setString(1, updatedUser.getUserLoginId());
-        cs.setInt(2, choice);
-        cs.setString(3, newValue);
+        try{ cs = connection.prepareCall(updateUser);
+            cs.setString(1, updatedUser.getUserLoginId());
+            cs.setInt(2, choice);
+            cs.setString(3, newValue);
 
-        cs.execute();
+            cs.execute();}
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
