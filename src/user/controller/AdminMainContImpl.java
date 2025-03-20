@@ -21,8 +21,9 @@ public class AdminMainContImpl {
 
 
             printMenu();
-            String input = sc.nextLine().trim();
+
             while(true) {
+                String input = sc.nextLine().trim(); // 루프내에서 계속 입력 받기
                 switch (input) {
                     case "1" -> createUser();
                     case "2" -> findUser();
