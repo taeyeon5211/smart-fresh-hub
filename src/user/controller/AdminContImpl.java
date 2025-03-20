@@ -1,4 +1,5 @@
 package user.controller;
+import login.controller.LoginCont;
 import login.dto.LoginResDTO;
 import user.dto.UserDTO;
 import user.service.UserService;
@@ -9,9 +10,12 @@ import java.util.Scanner;
 public class AdminContImpl implements AdminCont {
 
     private final UserService userService;
+    private final LoginCont loginCont;
+
     private static final Scanner sc = new Scanner(System.in);
-    public AdminContImpl(UserService userService) {
+    public AdminContImpl(UserService userService, LoginCont loginCont) {
         this.userService = userService;
+        this.loginCont = loginCont;
     }
 
 
@@ -133,6 +137,34 @@ public class AdminContImpl implements AdminCont {
             }
         }
 
+    }
+
+    /**
+     * 일반 회원의 메뉴를 시작하는 메서드
+     * @param loginedUser 로그인 후 반환된 LoginResDTO
+     */
+    public void startClientMenu(LoginResDTO loginedUser) throws SQLException {
+        printClientMenu();
+        int choice = sc.nextInt();
+
+        switch (choice) {
+            case 1 -> readMyAccount(loginedUser);
+            case 2 -> updateMyAccount(loginedUser);
+            case 3 -> deleteMyAccount(loginedUser);
+            case 4 -> loginCont.startLoginPage();
+            default -> System.out.println("잘못된 입력입니다. 다시 선택하세요.");
+        }
+
+    }
+
+    private void printClientMenu() {
+        System.out.println("======== 사용자 메뉴 ========");
+        System.out.println("1. 내 정보 조회");
+        System.out.println("2. 내 정보 수정");
+        System.out.println("3. 회원 탈퇴");
+        System.out.println("4. 로그아웃");
+        System.out.println("============================");
+        System.out.print("원하는 메뉴의 번호를 입력하세요: ");
     }
 
 }
