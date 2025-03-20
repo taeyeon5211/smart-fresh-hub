@@ -119,9 +119,10 @@ public class AdminContImpl implements AdminCont {
     public void startAdminMenu() throws SQLException {
 
 
-        printMenu();
+
 
         while(true) {
+            printMenu();
             String input = sc.nextLine().trim(); // 루프내에서 계속 입력 받기
             switch (input) {
                 case "1" -> createUser();
