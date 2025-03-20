@@ -16,6 +16,12 @@ public interface AreaService {
     List<AreaDto> getAreaAll();
 
     /**
+     * 해당 창고 아이디에 해당하는 구역 정보 출력
+     * @param warehouseId
+     * @return
+     */
+    List<AreaDto> getAreaListByWarehouseId(int warehouseId);
+    /**
      * 창고별 공간, 남은공간 리스트 반환 메소드
      * @return
      */
