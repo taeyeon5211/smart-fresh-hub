@@ -66,6 +66,7 @@ public class AreaRepositoryImp implements AreaRepository {
                 list.add(AreaDto.builder()
                         .areaId(areaVo.getAreaId())
                         .areaSpace(areaVo.getAreaSpace())
+                        .areaCode(areaVo.getAreaCode())
                         .areaPrice(areaVo.getAreaPrice())
                         .warehouseId(areaVo.getWarehouseId())
                         .storageId(areaVo.getStorage_id())
