@@ -139,10 +139,9 @@ public class UserRepoImpl implements UserRepo {
             cs.setString(1, vo.getUserLoginId()); // 로그인 아이디 매칭되는 회원 삭제
             cs.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally {
-
+            e.printStackTrace();
         }
+
         return isSuccess;
     }
 
