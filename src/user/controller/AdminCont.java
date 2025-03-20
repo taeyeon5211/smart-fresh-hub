@@ -9,7 +9,7 @@ public interface AdminCont {
     void createUser();
     void findUser();
     void updateUser() throws SQLException;
-    void deleteUser();
+    void deleteUser() throws SQLException;
 
     void readMyAccount(LoginResDTO loginedUser);
 

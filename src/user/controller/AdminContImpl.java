@@ -80,16 +80,59 @@ public class AdminContImpl implements AdminCont {
     }
 
     @Override
-    public void deleteUser() {
+    public void deleteUser() throws SQLException {
 
             System.out.println("삭제할 회원의 아이디를 입력하세요: ");
             String userLoginId = sc.nextLine().trim();
-           userService.deleteUser(userLoginId);
+        try {
+            userService.deleteUser(userLoginId);
+            System.out.println("회원 삭제가 완료되었습니다.");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            System.out.println("삭제할 회원이 존재하지 않습니다. 메인 메뉴로 돌아갑니다.");
+        }
+        startAdminMenu();
     }
 
     @Override
     public void readClientBackUpTbl() throws SQLException {
         userService.readClientBackUpTbl();
+    }
+
+
+    private void printMenu() {
+        System.out.println("\n" + "-".repeat(30));
+        System.out.println("   회원 관리 시스템   ");
+        System.out.println("-".repeat(30));
+        System.out.println(" 1. 회원 생성");
+        System.out.println(" 2. 회원 조회");
+        System.out.println(" 3. 회원 수정");
+        System.out.println(" 4. 회원 삭제");
+        System.out.println(" 5. 샥제된 회원 모두 조회");
+        System.out.println(" 0. 종료");
+        System.out.println("-".repeat(30));
+    }
+    public void startAdminMenu() throws SQLException {
+
+
+        printMenu();
+
+        while(true) {
+            String input = sc.nextLine().trim(); // 루프내에서 계속 입력 받기
+            switch (input) {
+                case "1" -> createUser();
+                case "2" -> findUser();
+                case "3" -> updateUser();
+                case "4" -> deleteUser();
+                case "5" -> readClientBackUpTbl();
+                case "0" -> {
+                    System.out.println("프로그램을 종료합니다.");
+                    System.exit(0);
+                }
+                default -> System.out.println("유효하지 않은 입력입니다. 재입력하세요.");
+            }
+        }
+
     }
 
 }
