@@ -18,7 +18,7 @@ public class Main_Test {
     public static void main(String[] args) throws SQLException {
         LoginRepo loginRepo = new LoginRepoImpl();
         LoginService loginService = new LoginServiceImpl(loginRepo);
-        LoginContImpl loginCont = new LoginContImpl(loginService);
+        LoginCont loginCont = new LoginContImpl(loginService);
 
         UserRepo userRepo = new UserRepoImpl();
         UserService userService = new UserServiceImpl(userRepo);
@@ -26,20 +26,27 @@ public class Main_Test {
 
         AdminMainContImpl adminMainCont = new AdminMainContImpl(adminCont);
 
-
+        loginCont = new LoginContImpl(loginService, userService);
         // 로그인 시작
-        LoginResDTO loginResDto = loginCont.inputLogin();
-        String userType = loginCont.checkUserType(loginResDto);
-        if (loginResDto != null) {// 널 아니면 회원관리 시작
-
-            System.out.println(loginResDto.getUserLoginId() + " 사용자 확인되었습니다. " + userType + " 유형입니다. " + userType + " 전용 메뉴 시작합니다. ");
-            if (userType.equals("ADMIN")) {
-                // 총관리자 가 할 수 있는 기능 시작
+        String input = loginCont.startLoginPage();
 
 
-            } else {
-                adminMainCont.startClientMenu(loginResDto);
-            }
+        if(input.equals("1")){
+            LoginResDTO loginResDto = loginCont.inputLogin();
+            String userType = loginCont.checkUserType(loginResDto);
+            if (loginResDto != null) {// 널 아니면 회원관리 시작
+
+                System.out.println(loginResDto.getUserLoginId() + " 사용자 확인되었습니다. " + userType + " 유형입니다. " + userType + " 전용 메뉴 시작합니다. ");
+                if (userType.equals("ADMIN")) {
+                    // 총관리자 가 할 수 있는 기능 시작
+                    adminMainCont.startAdminMenu();
+                } else {
+                    adminMainCont.startClientMenu(loginResDto);
+                }
+        }
+
+        }else if (input.equals("2")){
+            loginCont.createNewAccount();
         }
     }
 }
