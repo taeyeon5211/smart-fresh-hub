@@ -15,6 +15,7 @@ import user.vo.UserType;
 import java.sql.SQLException;
 
 public class Main_Test {
+
     public static void main(String[] args) throws SQLException {
         LoginRepo loginRepo = new LoginRepoImpl();
         LoginService loginService = new LoginServiceImpl(loginRepo);
