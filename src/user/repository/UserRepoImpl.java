@@ -153,8 +153,8 @@ public class UserRepoImpl implements UserRepo {
             rs = pstmt.executeQuery();
 
             {
-                System.out.println("===== 사용자 목록 =====");
-                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "ID", "로그인 ID", "이름", "이메일", "계정 생성일" , "계정 삭제일");
+                System.out.println("===== 삭제된 사용자 목록 =====");
+                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "로그인 ID", "이름", "이메일", "계정 생성일" , "계정 삭제일");
                 System.out.println("--------------------------------------------------------------");
 
                     while (rs.next()) {
@@ -162,9 +162,10 @@ public class UserRepoImpl implements UserRepo {
                         String userName = rs.getString("user_name");
                         String userEmail = rs.getString("user_email");
                         String createdAt = rs.getString("user_created_at");
-                        String deletedAt = rs.getString("user_deleted_at");
+                        String deletedAt = rs.getString("deleted_at");
 
-                        System.out.printf("%-15s %-15s %-25s %-15s%n %-15s%n",userLoginId, userName, userEmail, createdAt, deletedAt);
+                        System.out.printf("%-15s %-15s %-25s %-15s %-15s%n",
+                                userLoginId, userName, userEmail, createdAt, deletedAt);
                     }
             }
         } catch (SQLException e) {

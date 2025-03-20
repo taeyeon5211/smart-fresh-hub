@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 USE wms_db;
-drop table if exists user_table;
+
 CREATE TABLE user_table (
                             user_id INT AUTO_INCREMENT PRIMARY KEY,
                             user_login_id VARCHAR(50) NOT NULL UNIQUE,
@@ -33,6 +33,7 @@ CREATE TABLE user_table (
                             user_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                             user_type ENUM('admin', 'client') NOT NULL
 );
+desc user_table;
 
 -- 3. 관리자 테이블
 CREATE TABLE admin_table (
@@ -147,7 +148,7 @@ CREATE TABLE revenue_history_table (
 );
 
 -- 15. 회원 백업용 테이블
-drop table if exists user_backup_table;
+
 CREATE TABLE user_backup_table (
                                    backup_id INT AUTO_INCREMENT PRIMARY KEY, -- 백업 데이터의 고유 ID
                                    user_id INT, -- 삭제된 사용자 ID
