@@ -114,7 +114,7 @@ public class DiConfig {
         return new LoginServiceImpl(getLoginRepository());
     }
     public LoginCont getLoginController() {
-        return new LoginContImpl(getLoginService());
+        return new LoginContImpl(getLoginService(),getUserService());
     }
 
     //user Di

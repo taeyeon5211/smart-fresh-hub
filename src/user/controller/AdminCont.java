@@ -19,5 +19,5 @@ public interface AdminCont {
     void readClientBackUpTbl();
 
     void startAdminMenu();
-    void startClientMenu(LoginResDTO loginResDto);
+    void startClientMenu();
 }

@@ -1,5 +1,6 @@
 package login.controller;
 
+import auth.Auth;
 import login.dto.LoginResDTO;
 import login.service.LoginService;
 import user.controller.AdminCont;
@@ -34,7 +35,6 @@ public class LoginContImpl implements LoginCont{
         System.out.print("메뉴를 선택하세요: ");
 
         String input = sc.nextLine().trim();
-
         return input;
     }
     @Override
@@ -43,7 +43,8 @@ public class LoginContImpl implements LoginCont{
     }
 
     @Override
-    public LoginResDTO inputLogin() {
+    public void inputLogin() {
+        Auth auth = Auth.getinstance();
         System.out.print("로그인 아이디를 입력하세요: ");
         String loginId = sc.next();
 
@@ -51,8 +52,7 @@ public class LoginContImpl implements LoginCont{
         String password = sc.next();
 
         LoginResDTO loginResDto = loginService.authLogin(loginId, password);// 엔터 누를 시 사용자 입력값을 받아 서비스로 넘기기
-
-        return loginResDto;
+        auth.setLoginResDto(loginResDto);
     }
 
     @Override
