@@ -36,14 +36,12 @@ public class OutboundDTO {
 
     @Override
     public String toString() {
-        return "OutboundDTO{" +
-                "outboundId=" + outboundId +
-                ", outboundDate=" + outboundDate +
-                ", outboundRequestDate=" + outboundRequestDate +
-                ", outboundStatus='" + outboundStatus + '\'' +
-                ", adminId=" + adminId +
-                ", outboundAmount=" + outboundAmount +
-                ", productId=" + productId +
-                '}';
+        return  "출고 ID =" + outboundId +
+                ", 출고 날짜 = " + outboundDate +
+                ", 출고 요청 날짜 =" + outboundRequestDate +
+                ", 출고 상태 ='" + outboundStatus + '\'' +
+                ", 관리자 ID =" + adminId +
+                ", 출고수량 =" + outboundAmount +
+                ", 제품 ID =" + productId;
     }
 }

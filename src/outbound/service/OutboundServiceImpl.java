@@ -14,7 +14,7 @@ import java.util.Optional;
  * 출고 요청 생성, 조회, 상태 변경 및 재고 감소 기능을 제공한다.
  */
 public class OutboundServiceImpl implements OutboundService {
-    private final OutboundRepository outboundRepository;
+    OutboundRepository outboundRepository;
 
     /**
      * 생성자: 출고 서비스 구현체를 생성한다.
@@ -62,22 +62,26 @@ public class OutboundServiceImpl implements OutboundService {
     @Override
     public void updateOutboundStatus(String newStatus, int adminId, LocalDateTime outboundDate, int outboundId) {
         outboundRepository.updateOutboundStatus(newStatus, adminId, outboundDate, outboundId);
-
-        // 출고가 승인된 경우 재고 감소 로직 실행
-        if ("승인".equals(newStatus)) {
-            outboundRepository.updateRevenue(outboundId);
-            outboundRepository.deleteZeroRevenue();
+        if (newStatus.equals("승인")) {
+            List<Integer> revenueAmounts = outboundRepository.getRevenueAmount(outboundId);
+            int revenueAmount = revenueAmounts.get(0);
+            int outboundAmount = revenueAmounts.get(1);
+            if (revenueAmount < outboundAmount) {
+                throw new RuntimeException("출고수량이 재고수량보다 더 많습니다.");
+            } else {
+                outboundRepository.updateRevenue(outboundId);
+                if (revenueAmount == 0) {
+                    outboundRepository.deleteZeroRevenue();
+                }
+            }
         }
     }
 
-    /**
-     * 승인된 출고 요청을 반영하여 재고를 감소시키는 메서드.
-     * @param businessId 출고 요청이 속한 사업체 ID
-     */
     @Override
-    public void updateRevenue(int businessId) {
-        outboundRepository.updateRevenue(businessId);
+    public void updateRevenue(int outboundId) {
+        outboundRepository.updateRevenue(outboundId);
     }
+
 
     /**
      * 전체 출고 요청 목록을 조회하는 메서드.
@@ -96,30 +100,31 @@ public class OutboundServiceImpl implements OutboundService {
         outboundRepository.deleteZeroRevenue();
     }
 
-    /**
-     * 출고 서비스 동작 테스트용 메인 메서드.
-     * 출고 요청 생성 및 상태 업데이트를 실행한다.
-     */
+    @Override
+    public List<Integer> getRevenueAmount(int outboundId) {
+        return outboundRepository.getRevenueAmount(outboundId);
+    }
+
+
     public static void main(String[] args) {
-        OutboundRepository repo = new OutboundRepositoryImpl2();
+        OutboundRepository repo = new OutboundRepositoryImpl();
         OutboundService service = new OutboundServiceImpl(repo);
+//        service.createOutboundRequest(new OutboundDTO().builder().outboundAmount(1).productId(2).build());
+        service.updateOutboundStatus("승인", 1, LocalDateTime.now(), 2);
 
-//        // 1. 출고 요청 생성 테스트
-//        OutboundDTO newOutbound = OutboundDTO.builder()
-//                .outboundAmount(5)
-//                .productId(2)
-//                .build();
-//        service.createOutboundRequest(newOutbound);
-//        System.out.println("출고 요청 생성 테스트 완료");
+//        service.updateRevenue(11);
+//        Optional<List<OutboundDTO>> outboundDTOS = service.readOutboundRequest();
+//        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
+//            System.out.println(outboundDTO.toString());
+//        }
+//        List<Integer> revenueAmount = service.getRevenueAmount(1);
+//        for (Integer i : revenueAmount) {
+//            System.out.println(i);
+//        }
 
-        // 2. 출고 요청 상태 변경 테스트 (승인)
-        int testOutboundId = 2;
-        service.updateOutboundStatus("승인", 1, LocalDateTime.now(), testOutboundId);
-        System.out.println("출고 요청 승인 테스트 완료");
-
-
-
-
+//        Optional<List<OutboundDTO>> outboundDTOS = service.readOutboundStatus(2);
+//        for (OutboundDTO outboundDTO : outboundDTOS.orElse(null)) {
+//            System.out.println(outboundDTO.toString());
+//        }
     }
 }
-

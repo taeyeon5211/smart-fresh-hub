@@ -16,9 +16,11 @@ public interface OutboundService {
 
     void updateOutboundStatus(String newStatus, int adminId, LocalDateTime outboundDate, int outboundId);
 
-    void updateRevenue(int businessId);
+    void updateRevenue(int outboundId);
 
     Optional<List<OutboundDTO>> readAllOutboundRequest();
 
     void deleteZeroRevenue();
+
+    List<Integer> getRevenueAmount(int outboundId);
 }
