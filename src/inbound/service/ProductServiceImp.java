@@ -26,26 +26,17 @@ public class ProductServiceImp implements ProductService {
                 .expirationDate(productDto.getExpirationDate())
                 .businessId(productDto.getBusinessId())
                 .build();
-
-        //  제품 등록 및 예외 처리
-        try {
-            int productId = productRepository.insertProduct(productVo);
-            if (productId <= 0) {
-                throw new ProductException(" 제품 등록 실패");
-            }
-            return productId;
-        } catch (Exception e) {
-            throw new ProductException(" 제품 등록 중 오류 발생: " + e.getMessage(), e);
+        int productId = productRepository.insertProduct(productVo);
+        if (productId <= 0) {
+            throw new ProductException("제품 등록 실패");
         }
+        return productId; // 성공적으로 등록된 product_id 반환
     }
 
     @Override
     public Map<Integer, String> getAllCategories() {
-        try {
-            return productRepository.findAllCategories();
-        } catch (Exception e) {
-            throw new ProductException(" 카테고리 조회 중 오류 발생", e);
-        }}
+        return productRepository.findAllCategories(); // 예외 발생 시 그대로 던진다.
+    }
 
 
 }

@@ -117,8 +117,9 @@ public class InboundServiceImp implements InboundService {
 
     @Override // 관리자가 입고 요청 상태 변경
     public boolean updateInboundStatus(int inboundId, String status) {
+        // 만약 '승인'이 아닌 상태 변경 요청 (예: '취소' 등)인 경우, 바로 업데이트 수행
         if (!"승인".equals(status)) {
-            //
+
             boolean updated = inboundRepository.updateInboundStatus(inboundId, status);
             if (!updated) {
                 throw new InboundException("입고 요청 상태 변경 실패!");
@@ -133,8 +134,8 @@ public class InboundServiceImp implements InboundService {
         }
         InboundRequestDto inbound = inboundOpt.get();
 
-        int productId = inbound.getProductId();
-        int inboundAmount = inbound.getAmount();
+        int productId = inbound.getProductId(); // 제품 크기 (1개당 차지하는 공간)
+        int inboundAmount = inbound.getAmount();  // 제품의 적정 보관 온도
 
         //  제품 정보 가져오기
         Optional<ProductDto> productOpt = productRepository.getProductById(productId);

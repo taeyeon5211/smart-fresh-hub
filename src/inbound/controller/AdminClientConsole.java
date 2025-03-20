@@ -118,7 +118,9 @@ public class AdminClientConsole {
     }
     public static void main(String[] args) {
         AdminClientConsole adminClientConsole = new AdminClientConsole();
-        adminClientConsole.startClientConsole();
+        adminClientConsole.start();
+//        adminClientConsole.startClientConsole();
+
     }
 }
 

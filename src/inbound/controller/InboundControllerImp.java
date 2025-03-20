@@ -70,7 +70,7 @@ public class InboundControllerImp implements InboundController {
             Map<Integer, String> products = inboundService.getAvailableProducts(businessId);
 
             if (products.isEmpty()) {
-                printErrorMessage("⚠ 해당 사업체의 등록된 제품이 없습니다.");
+                printErrorMessage(" 해당 사업체의 등록된 제품이 없습니다.");
             } else {
                 System.out.println("\n 사업체 ID " + businessId + "의 제품 목록");
                 products.forEach((id, name) -> System.out.println(" - 제품 ID: " + id + " | 제품명: " + name));
@@ -173,10 +173,10 @@ public class InboundControllerImp implements InboundController {
             Map<Integer, String> businesses = inboundService.getAllBusinesses();
 
             if (businesses.isEmpty()) {
-                printErrorMessage("⚠ 등록된 사업체가 없습니다.");
+                printErrorMessage("등록된 사업체가 없습니다.");
             } else {
                 businesses.forEach((id, name) ->
-                        System.out.printf("🏢 사업체 ID: %d | 사업체명: %s%n", id, name));
+                        System.out.printf(" 사업체 ID: %d | 사업체명: %s%n", id, name));
             }
         } catch (Exception e) {
             printErrorMessage(" 오류 발생: " + e.getMessage());
@@ -198,7 +198,7 @@ public class InboundControllerImp implements InboundController {
                 int value = scanner.nextInt();
                 scanner.nextLine();
                 if (value < min || value > max) {
-                    throw new IllegalArgumentException("⚠ 입력값이 유효한 범위를 벗어났습니다. (" + min + " ~ " + max + ")");
+                    throw new IllegalArgumentException("입력값이 유효한 범위를 벗어났습니다. (" + min + " ~ " + max + ")");
                 }
                 return value;
             } catch (InputMismatchException e) {
@@ -223,103 +223,6 @@ public class InboundControllerImp implements InboundController {
     }
 
 
-    /**
-     * 프로젝트 전체 기능을 실행하는 `Main` 클래스.
-     * <p>
-     * 1입고 요청
-     * 2️입고 요청 승인 / 취소
-     * 3️대기 중인 입고 요청 조회
-     * 4 특정 사업체의 입고 내역 조회
-     * 5️모든 사업체 조회
-     * 6️등록된 제품 목록 조회
-     * 7️ 재고 변경 이력 조회 (관리자)
-     */
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        //  Repository 객체 생성
-        InboundRepository inboundRepository = new InboundRepositoryImp();
-        ProductRepository productRepository = new ProductRepositoryImp();
-        StorageConditionRepository storageConditionRepository = new StorageConditionRepositoryImp();
-        RevenueRepository revenueRepository = new RevenueRepositoryImp();
-        AreaService areaService = new AreaServiceImp(new AreaRepositoryImp(),new WareHouseRepositoryImp());
-
-        //  Service 객체 생성
-        InboundService inboundService = new InboundServiceImp(
-                inboundRepository, productRepository, storageConditionRepository, revenueRepository, areaService
-        );
-        ProductService productService = new ProductServiceImp(productRepository);
-
-        // Controller 객체 생성
-        InboundController inboundController = new InboundControllerImp(inboundService);
-
-        while (true) {
-            printMenu();
-            System.out.print("선택: ");
-            String choice = scanner.nextLine();
-
-            try {
-                switch (choice) {
-                    case "1" -> inboundController.handleInboundRequest(); // 입고 요청
-                    case "2" -> inboundController.updateInboundStatus(); // 입고 승인 / 취소
-                    case "3" -> inboundController.showAllPendingInboundList(); // 대기 중인 입고 요청 조회
-                    case "4" -> inboundController.showInboundHistoryByBusiness(); // 특정 사업체 입고 내역 조회
-                    case "5" -> inboundController.showAllBusinesses(); // 모든 사업체 조회
-                    case "6" -> inboundController.showAvailableProducts(); // 등록된 제품 목록 조회
-                    case "7" -> showAllRevenueHistory(revenueRepository); // 재고 변경 이력 조회
-                    case "0" -> {
-                        System.out.println("프로그램 종료!");
-                        return;
-                    }
-                    default -> System.out.println("⚠ 잘못된 입력입니다. 다시 선택해주세요.");
-                }
-            } catch (Exception e) {
-                System.out.println(" 오류 발생: " + e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 관리자가 모든 재고 변경 이력을 조회하는 메서드.
-     */
-    private static void showAllRevenueHistory(RevenueRepository revenueRepository) {
-        System.out.println("\n [관리자: 재고 변경 이력 조회]");
-
-        try {
-            var historyList = revenueRepository.findAllRevenueHistory();
-            if (historyList.isEmpty()) {
-                System.out.println("⚠ 현재 등록된 재고 변경 이력이 없습니다.");
-                return;
-            }
-
-            historyList.forEach(history ->
-                    System.out.printf(" 재고 ID: %d | 변경 날짜: %s | 변경 수량: %d | 유형: %s | 제품명: %s | 사업체명: %s%n",
-                            history.getRevenueId(), history.getChangeDate(), history.getRevenueQuantity(),
-                            history.getChangeType(), history.getProductName(), history.getBusinessName()));
-
-        } catch (Exception e) {
-            System.out.println("오류 발생: " + e.getMessage());
-        }
-
-
-    }
-
-    /**
-     * 메뉴 출력 메서드.
-     */
-    private static void printMenu() {
-        System.out.println("\n=================================");
-        System.out.println(" [WMS 시스템 테스트 메뉴]");
-        System.out.println("1️. 입고 요청");
-        System.out.println("2️. 입고 요청 승인 / 취소");
-        System.out.println("3️. 대기 중인 입고 요청 조회");
-        System.out.println("4️. 특정 사업체의 입고 내역 조회");
-        System.out.println("5️. 모든 사업체 조회");
-        System.out.println("6️. 등록된 제품 목록 조회");
-        System.out.println("7️. 재고 변경 이력 조회 (관리자)");
-        System.out.println("0️. 종료");
-        System.out.println("=================================");
-    }
 
 }
 
