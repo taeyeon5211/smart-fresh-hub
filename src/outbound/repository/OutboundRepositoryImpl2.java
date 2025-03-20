@@ -249,6 +249,11 @@ public class OutboundRepositoryImpl2 implements OutboundRepository {
         }
     }
 
+    @Override
+    public List<Integer> getRevenueAmount(int outboundId) {
+        return List.of();
+    }
+
 
     public static void main(String[] args) {
         OutboundRepositoryImpl2 outboundRepository = new OutboundRepositoryImpl2();

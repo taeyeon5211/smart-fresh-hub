@@ -103,7 +103,7 @@ public class OutboundControllerImpl implements OutboundController {
 
             switch (choice) {
                 case "1" -> outboundController.readAllOutboundRequest();
-                case "2" -> outboundController.readOutboundStatus();
+                case "2" -> outboundController.readOutboundRequest();
                 case "3" -> outboundController.updateOutboundStatus();
                 case "0" -> {
                     System.out.println("프로그램 종료");
