@@ -157,7 +157,7 @@ public class UserRepoImpl implements UserRepo {
             rs = pstmt.executeQuery();
 
             System.out.println("===== 삭제된 사용자 목록 =====");
-            System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "로그인 ID", "이름", "이메일", "계정 생성일", "계정 삭제일");
+            System.out.printf("%-10s %-15s %-25s %-15s%n", "로그인 ID", "이름", "계정 생성일", "계정 삭제일");
             System.out.println("--------------------------------------------------------------");
 
             while (rs.next()) {
@@ -168,10 +168,10 @@ public class UserRepoImpl implements UserRepo {
                 backupDto.setCreatedAt(rs.getString("user_created_at"));
                 backupDto.setDeletedAt(rs.getString("deleted_at"));
                 backupDtos.add(backupDto);
-                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n",
+                System.out.printf("%-10s %-15s %-25s %-15s%n",
                         backupDto.getUserLoginId(),
                         backupDto.getUserName(),
-                        backupDto.getUserEmail(),
+
                         backupDto.getCreatedAt(),
                         backupDto.getDeletedAt()
                 );

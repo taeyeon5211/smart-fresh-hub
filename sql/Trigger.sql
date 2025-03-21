@@ -28,7 +28,7 @@ BEGIN
 END $$
 
 DELIMITER ;
-
+select * from user_table;
 -- 회원이 삭제될때 backup_deleted_user에 기록하기
 CREATE TRIGGER backup_deleted_user
     BEFORE DELETE
