@@ -1,4 +1,4 @@
-
+use wms_db;
 -- 관리자 FK
 ALTER TABLE admin_table
     ADD CONSTRAINT fk_admin_user FOREIGN KEY (user_id) REFERENCES user_table(user_id) ON DELETE CASCADE;
@@ -40,6 +40,4 @@ ALTER TABLE revenue_table
 ALTER TABLE revenue_history_table
     ADD CONSTRAINT fk_revenue_history_inventory FOREIGN KEY (revenue_id) REFERENCES revenue_table(revenue_id) ON DELETE CASCADE;
 
--- 회원 삭제 백업 테이블 FK
-ALTER TABLE user_backup_table
-    ADD CONSTRAINT fk_backup_user_id FOREIGN KEY (user_id) REFERENCES user_table (user_id);
+

@@ -1,5 +1,6 @@
 package user.repository;
 
+import user.dto.BackupDto;
 import user.dto.UserDTO;
 import user.vo.UserVO;
 
@@ -13,5 +14,5 @@ public interface UserRepo {
     Boolean deleteUser(UserVO userVo);
     void updateUser(UserVO userVo, int choice, String newValue);
 
-    void readClientBackUpTbl();
+    List<BackupDto> readClientBackUpTbl();
 }

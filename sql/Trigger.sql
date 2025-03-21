@@ -28,18 +28,15 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-
+select * from user_table;
 -- 회원이 삭제될때 backup_deleted_user에 기록하기
 CREATE TRIGGER backup_deleted_user
     BEFORE DELETE
     ON user_table
     FOR EACH ROW
 BEGIN
-    INSERT INTO user_backup_table (user_id, user_login_id, user_name, user_password, user_address,
-                                   user_email, user_phone, user_birth_date, user_created_at, user_type, deleted_at)
-    VALUES (OLD.user_id, OLD.user_login_id, OLD.user_name, OLD.user_password, OLD.user_address,
-            OLD.user_email, OLD.user_phone, OLD.user_birth_date, OLD.user_created_at, OLD.user_type, NOW());
+    INSERT INTO user_backup_table (user_id, user_login_id, user_name, user_created_at, deleted_at)
+    VALUES (OLD.user_id, OLD.user_login_id, OLD.user_name, OLD.user_created_at,  NOW());
 END;
 
 

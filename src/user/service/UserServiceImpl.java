@@ -2,8 +2,10 @@ package user.service;
 
 import user.controller.AdminCont;
 import user.controller.UserInputHelper;
+import user.dto.BackupDto;
 import user.dto.UserDTO;
 import user.repository.UserRepo;
+import user.repository.UserRepoImpl;
 import user.vo.UserVO;
 import user.vo.UserType;
 
@@ -60,7 +62,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("해당회원이 존재하지 않습니다.");
         }
 
-
     }
 
 
@@ -95,25 +96,19 @@ public class UserServiceImpl implements UserService {
     public UserDTO findUser(String userLoginId) {
         try {
             UserVO foundVo = userRepo.findUser(userLoginId);
-
-            if (foundVo == null) {
-                throw new RuntimeException("해당 로그인 ID를 가진 사용자를 찾을 수 없습니다: " + userLoginId);
-            } else {
                 System.out.println(foundVo.getUserLoginId() + "사용자 정보는 아래와 같습니다. ");
                 System.out.println(foundVo);
                 return new UserDTO(foundVo);
-            }
 
-
-        } catch (Exception e) {
-            System.out.println("사용자 조회 중 오류 발생: " + e.getMessage());
+        } catch (RuntimeException e) {
+            //System.out.println("회원 정보가 없습니다.");
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void readClientBackUpTbl() {
-        userRepo.readClientBackUpTbl();
+    public List<BackupDto> readClientBackUpTbl() {
+        return userRepo.readClientBackUpTbl();
     }
 
     /**
@@ -132,5 +127,10 @@ public class UserServiceImpl implements UserService {
             userDTOList.add(userDto); // 변환한 dto를 리스트에 저장.
         }
         return userDTOList;
+    }
+
+    public static void main(String[] args) {
+        UserServiceImpl userService = new UserServiceImpl(new UserRepoImpl());
+        userService.readClientBackUpTbl().forEach(System.out::println);
     }
 }

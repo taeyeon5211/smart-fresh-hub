@@ -71,17 +71,24 @@ public class UserVO {
 
     @Override
     public String toString() {
-        return "UserVO{" +
-                "userId=" + userId +
-                ", userLoginId='" + userLoginId + '\'' +
-                ", userPassword='" + userPassword + '\'' +
-                ", userAddress='" + userAddress + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPhone='" + userPhone + '\'' +
-                ", userBirthDate=" + userBirthDate +
-                ", userCreatedAt=" + userCreatedAt +
-                ", userType=" + userType +
-                '}';
+        return String.format(
+                """
+                ==============================
+                회원 정보
+                ------------------------------
+                로그인 ID    : %s
+                주소         : %s
+                이름         : %s
+                이메일       : %s
+                전화번호     : %s
+                생년월일     : %s
+                가입일       : %s
+                ==============================
+                """,
+                userLoginId, userAddress, userName,
+                userEmail, userPhone, userBirthDate, userCreatedAt
+        );
     }
+
+
 }

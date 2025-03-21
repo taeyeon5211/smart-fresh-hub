@@ -1,5 +1,6 @@
 package user.service;
 
+import user.dto.BackupDto;
 import user.dto.UserDTO;
 import user.vo.UserVO;
 
@@ -14,5 +15,5 @@ public interface UserService {
    UserDTO findUser(String userLoginId);
     void createNewAccount();
    List<UserDTO> findAllUsers();
-   void readClientBackUpTbl();
+   List<BackupDto> readClientBackUpTbl();
 }
