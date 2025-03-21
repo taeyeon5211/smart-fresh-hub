@@ -1,11 +1,13 @@
 package user.repository;
 
 import object.ObjectIo;
+import user.dto.BackupDto;
 import user.vo.UserVO;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -106,17 +108,18 @@ public class UserRepoImpl implements UserRepo {
      * @return
      */
     @Override
-    public void updateUser(UserVO updatedUser, int choice, String newValue){
+    public void updateUser(UserVO updatedUser, int choice, String newValue) {
         // 원하는 컬럼만 업데이트
         String updateUser = "{CALL UpdateUser(?, ?, ?)}";
 
-        try{ cs = connection.prepareCall(updateUser);
+        try {
+            cs = connection.prepareCall(updateUser);
             cs.setString(1, updatedUser.getUserLoginId());
             cs.setInt(2, choice);
             cs.setString(3, newValue);
 
-            cs.execute();}
-        catch (SQLException e){
+            cs.execute();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -146,30 +149,36 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
-    public void readClientBackUpTbl()  {
-        String query = "SELECT * FROM user_backup_table backup JOIN user_table u on backup.user_id = u.user_id";
+    public List<BackupDto> readClientBackUpTbl() {
+        String query = "SELECT * FROM user_backup_table";
+        List<BackupDto> backupDtos = new ArrayList<>();
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             rs = pstmt.executeQuery();
 
-            {
-                System.out.println("===== 삭제된 사용자 목록 =====");
-                System.out.printf("%-10s %-15s %-15s %-25s %-15s%n", "로그인 ID", "이름", "이메일", "계정 생성일" , "계정 삭제일");
-                System.out.println("--------------------------------------------------------------");
+            System.out.println("===== 삭제된 사용자 목록 =====");
+            System.out.printf("%-10s %-15s %-25s %-15s%n", "로그인 ID", "이름", "계정 생성일", "계정 삭제일");
+            System.out.println("--------------------------------------------------------------");
 
-                    while (rs.next()) {
-                        String userLoginId = rs.getString("user_login_id");
-                        String userName = rs.getString("user_name");
-                        String userEmail = rs.getString("user_email");
-                        String createdAt = rs.getString("user_created_at");
-                        String deletedAt = rs.getString("deleted_at");
+            while (rs.next()) {
+                BackupDto backupDto = new BackupDto();
+                backupDto.setUserLoginId(rs.getString("user_login_id"));
+                backupDto.setUserName(rs.getString("user_name"));
 
-                        System.out.printf("%-15s %-15s %-25s %-15s %-15s%n",
-                                userLoginId, userName, userEmail, createdAt, deletedAt);
-                    }
+                backupDto.setCreatedAt(rs.getString("user_created_at"));
+                backupDto.setDeletedAt(rs.getString("deleted_at"));
+                backupDtos.add(backupDto);
+                System.out.printf("%-10s %-15s %-25s %-15s%n",
+                        backupDto.getUserLoginId(),
+                        backupDto.getUserName(),
+
+                        backupDto.getCreatedAt(),
+                        backupDto.getDeletedAt()
+                );
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return backupDtos;
     }
 }

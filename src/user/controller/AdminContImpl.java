@@ -83,8 +83,13 @@ public class AdminContImpl implements AdminCont {
         int choice = sc.nextInt();
 
 
-        UserDTO fetchedUser = userService.findUser(userLoginId);
-        userService.updateUser(fetchedUser, choice);
+        try {
+            UserDTO fetchedUser = userService.findUser(userLoginId);
+            userService.updateUser(fetchedUser, choice);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        startAdminMenu();
 
     }
 
@@ -105,7 +110,13 @@ public class AdminContImpl implements AdminCont {
 
     @Override
     public void readClientBackUpTbl(){
-        userService.readClientBackUpTbl();
+
+        try {
+            userService.readClientBackUpTbl();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        startAdminMenu();
     }
 
 
