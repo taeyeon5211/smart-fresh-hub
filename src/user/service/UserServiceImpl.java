@@ -2,8 +2,10 @@ package user.service;
 
 import user.controller.AdminCont;
 import user.controller.UserInputHelper;
+import user.dto.BackupDto;
 import user.dto.UserDTO;
 import user.repository.UserRepo;
+import user.repository.UserRepoImpl;
 import user.vo.UserVO;
 import user.vo.UserType;
 
@@ -105,8 +107,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void readClientBackUpTbl() {
-        userRepo.readClientBackUpTbl();
+    public List<BackupDto> readClientBackUpTbl() {
+        return userRepo.readClientBackUpTbl();
     }
 
     /**
@@ -125,5 +127,10 @@ public class UserServiceImpl implements UserService {
             userDTOList.add(userDto); // 변환한 dto를 리스트에 저장.
         }
         return userDTOList;
+    }
+
+    public static void main(String[] args) {
+        UserServiceImpl userService = new UserServiceImpl(new UserRepoImpl());
+        userService.readClientBackUpTbl().forEach(System.out::println);
     }
 }
