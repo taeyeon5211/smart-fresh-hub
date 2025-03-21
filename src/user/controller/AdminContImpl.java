@@ -30,8 +30,12 @@ public class AdminContImpl implements AdminCont {
     @Override
     public void findUser() {
         String userLoginId = UserInputHelper.inputUserLoginId();
-        userService.findUser(userLoginId);
+        try {
+            userService.findUser(userLoginId);
+        } catch (Exception e) {
+            System.out.println("해당 사용자 아이디를 찾을 수 없습니다. 뒤로 돌아갑니다. ");
 
+        }
     }
     @Override
     public void readMyAccount(LoginResDTO loginedUser) { //
@@ -147,11 +151,14 @@ public class AdminContImpl implements AdminCont {
             case 1 -> readMyAccount(auth.getLoginResDto());
             case 2 -> updateMyAccount(auth.getLoginResDto());
             case 3 -> deleteMyAccount(auth.getLoginResDto());
-            case 4 -> loginCont.startLoginPage();
+            case 4 -> {
+                System.out.println("로그아웃 합니다. 메인 메뉴로 돌아갑니다.");
+                loginCont.startLoginPage();
+            }
             default -> System.out.println("잘못된 입력입니다. 다시 선택하세요.");
-        }
+            }
 
-    }
+        }
 
     private void printClientMenu() {
         System.out.println("======== 사용자 메뉴 ========");
@@ -162,5 +169,6 @@ public class AdminContImpl implements AdminCont {
         System.out.println("============================");
         System.out.print("원하는 메뉴의 번호를 입력하세요: ");
     }
-
 }
+
+
