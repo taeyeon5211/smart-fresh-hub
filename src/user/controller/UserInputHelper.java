@@ -30,9 +30,7 @@ public class UserInputHelper {
 
 
     public static String inputUserLoginId() {
-        System.out.print("로그인 ID를 입력하세요: ");
 
-        Scanner scanner = new Scanner(System.in);
         String userLoginId;
 
         while (true) {
@@ -64,7 +62,6 @@ public class UserInputHelper {
     }
 
     public static String inputUserPassword() {
-        System.out.print("비밀번호를 입력하세요: ");
 
         String userPassword;
 
