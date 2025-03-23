@@ -6,6 +6,7 @@ import user.dto.UserDTO;
 import user.service.UserService;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminContImpl implements AdminCont {
@@ -41,6 +42,22 @@ public class AdminContImpl implements AdminCont {
 
         }
         startAdminMenu();
+    }
+
+    @Override
+    public void fetchAllUsers() {
+        // 서비스를 호출하여 디비의 회원 객체 불러오기
+        try {
+            List<UserDTO> users = userService.fetchAllUsers();
+            for(UserDTO user : users) {
+                System.out.println(user);
+            }
+            System.out.println("모든 회원 정보를 출력 완료하였습니다.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+        startAdminMenu(); // 메인 메뉴로 뒤돌아가기
     }
 
     @Override
@@ -144,7 +161,8 @@ public class AdminContImpl implements AdminCont {
         System.out.println(" 2. 회원 조회");
         System.out.println(" 3. 회원 수정");
         System.out.println(" 4. 회원 삭제");
-        System.out.println(" 5. 샥제된 회원 모두 조회");
+        System.out.println(" 5. 삭제된 모든 회원 조회");
+        System.out.println(" 6. 모든 회원 조회");
         System.out.println(" 0. 종료");
         System.out.println("-".repeat(30));
     }
@@ -157,6 +175,7 @@ public class AdminContImpl implements AdminCont {
                 case "3" -> updateUser();
                 case "4" -> deleteUser();
                 case "5" -> readClientBackUpTbl();
+                case "6" -> fetchAllUsers();
                 case "0" -> {
                     System.out.println("회원관리를 종료합니다.");
                 }

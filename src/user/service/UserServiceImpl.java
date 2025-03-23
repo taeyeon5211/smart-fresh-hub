@@ -117,16 +117,16 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserDTO> findAllUsers() {
-        List<UserVO> allUsers = userRepo.findAllUsers();
+    public List<UserDTO> fetchAllUsers() {
+        List<UserDTO> allUsers = userRepo.fetchAllUsers();
 
-        List<UserDTO> userDTOList = new ArrayList<>();
+//        List<UserDTO> userDTOList = new ArrayList<>();
+//
+//        for (UserDTO dto : allUsers) {
+//            userDTOList.add(dto); // 변환한 dto를 리스트에 저장.
+//        }
 
-        for (UserVO vo : allUsers) {
-            UserDTO userDto = new UserDTO(vo); // 한개씩 dto 객체로 변환
-            userDTOList.add(userDto); // 변환한 dto를 리스트에 저장.
-        }
-        return userDTOList;
+        return allUsers;
     }
 
     public static void main(String[] args) {
