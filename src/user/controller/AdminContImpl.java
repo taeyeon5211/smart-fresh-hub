@@ -4,8 +4,6 @@ import login.controller.LoginCont;
 import login.dto.LoginResDTO;
 import user.dto.UserDTO;
 import user.service.UserService;
-
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 

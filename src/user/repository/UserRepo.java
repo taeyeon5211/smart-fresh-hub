@@ -3,8 +3,6 @@ package user.repository;
 import user.dto.UserDTO;
 import user.dto.BackupDto;
 import user.vo.UserVO;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public interface UserRepo {
