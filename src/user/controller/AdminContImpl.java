@@ -42,6 +42,7 @@ public class AdminContImpl implements AdminCont {
         }
         startAdminMenu();
     }
+
     @Override
     public void readMyAccount(LoginResDTO loginedUser) { //
         System.out.println(loginedUser);
@@ -71,10 +72,7 @@ public class AdminContImpl implements AdminCont {
 
     }
 
-    @Override
-    public void updateUser(){
-        String userLoginId = UserInputHelper.inputUserLoginId();
-
+    public void printAdminUpdateMenu() {
         System.out.println("===== 회원 정보 수정 메뉴 =====");
         System.out.println("1. 비밀번호 변경");
         System.out.println("2. 주소 변경");
@@ -84,6 +82,13 @@ public class AdminContImpl implements AdminCont {
         System.out.println("6. 생년월일 변경");
         System.out.println("7. 사용자 유형 변경");
         System.out.print("변경할 항목의 번호를 선택하세요: ");
+    }
+
+    @Override
+    public void updateUser(){
+        String userLoginId = UserInputHelper.inputUserLoginId();
+
+       printAdminUpdateMenu();
 
         int choice = sc.nextInt();
 
