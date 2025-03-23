@@ -27,15 +27,20 @@ public class AdminContImpl implements AdminCont {
         // 성공 메시지 추가하기
     }
 
+    /**
+     * 회원 한명의 로그인 아이디 입력 받은 후, 회원 정보를 출력하는 메서드
+     */
     @Override
     public void findUser() {
         String userLoginId = UserInputHelper.inputUserLoginId();
         try {
             userService.findUser(userLoginId);
+            System.out.println(userLoginId + "의 정보 출력하였습니다. 회원관리 메뉴로 돌아갑니다.");
         } catch (Exception e) {
-            System.out.println("해당 사용자 아이디를 찾을 수 없습니다. 뒤로 돌아갑니다. ");
+            System.out.println("해당 사용자 아이디를 찾을 수 없습니다. 회원관리 돌아갑니다. ");
 
         }
+        startAdminMenu();
     }
     @Override
     public void readMyAccount(LoginResDTO loginedUser) { //
