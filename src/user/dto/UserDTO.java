@@ -42,22 +42,6 @@ public class UserDTO {
     }
 
 
-    public UserDTO(ArrayList<UserVO> allUsers) {
-        for (UserVO vo : allUsers) {
-            this.userId = vo.getUserId();
-            this.userName = vo.getUserName();
-            this.userLoginId = vo.getUserLoginId();
-            this.userPassword = vo.getUserPassword();
-            this.userAddress = vo.getUserAddress();
-            this.userEmail = vo.getUserEmail();
-            this.userPhone = vo.getUserPhone();
-            this.userBirthDate = vo.getUserBirthDate();
-            this.userCreatedAt = vo.getUserCreatedAt();
-            this.userType = vo.getUserType();
-
-        }
-    }
-
     /**
      * vo객체를 받아 dto 로 변환하는 메소드
      * @param vo
