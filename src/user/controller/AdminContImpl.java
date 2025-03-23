@@ -61,6 +61,7 @@ public class AdminContImpl implements AdminCont {
         System.out.print("변경할 항목의 번호를 선택하세요: ");
 
         int choice = sc.nextInt();
+        sc.nextLine(); // 남아있는 개행 문자 처리
 
 
         UserDTO fetchedUser = userService.findUser(loginedUser.getUserLoginId());
@@ -84,23 +85,28 @@ public class AdminContImpl implements AdminCont {
         System.out.print("변경할 항목의 번호를 선택하세요: ");
     }
 
+    /**
+     * admin이 특정 회원의 정보를 수정하는 메서드
+     */
     @Override
     public void updateUser(){
         String userLoginId = UserInputHelper.inputUserLoginId();
 
-       printAdminUpdateMenu();
+       printAdminUpdateMenu(); // 수정할 서브메뉴 프린트
 
-        int choice = sc.nextInt();
-
+        int choice = sc.nextInt(); // 선택값 받기
+        sc.nextLine(); // 남아있는 개행문자 처리
 
         try {
             UserDTO fetchedUser = userService.findUser(userLoginId);
-            userService.updateUser(fetchedUser, choice);
+            userService.updateUser(fetchedUser, choice); //
+            System.out.println("회원 정보 수정 완료하였습니다.");
+            System.out.println(fetchedUser); // 수정된 정보 보여주기
         } catch (Exception e) {
+            System.out.println("오류 입니다. 회원 관리 메뉴로 돌아갑니다.");
             throw new RuntimeException(e);
         }
-        startAdminMenu();
-
+        startAdminMenu(); // 다시 뒤로 돌아가기
     }
 
     @Override
