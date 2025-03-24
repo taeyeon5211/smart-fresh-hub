@@ -173,8 +173,10 @@ public class OutboundRepositoryImpl implements OutboundRepository{
 //        }
 //    }
 
-
-    //출고요청 전체조회
+    /**
+     *
+     * @return
+     */
     @Override
     public Optional<List<OutboundDTO>> readAllOutboundRequest() {
         String sql = "select * from outbound_table";
@@ -201,8 +203,10 @@ public class OutboundRepositoryImpl implements OutboundRepository{
             throw new RuntimeException(e);
         }
     }
-    
-    //재고 테이블 수량 0이면 삭제하는 기능
+
+    /**
+     * 재고 수량이 0이면 재고에서 삭제하는 기능
+     */
     public void deleteZeroRevenue() {
         String sql = "delete from revenue_table where revenue_amount = 0";
         try (Connection conn = ObjectIo.getConnection();
@@ -213,7 +217,11 @@ public class OutboundRepositoryImpl implements OutboundRepository{
         }
     }
 
-    //outbound_id로 재고 수량 받아오는 기능
+    /**
+     * 재고 수량과 출고 수량을 가져오는 기능
+     * @param outboundId
+     * @return
+     */
     @Override
     public List<Integer> getRevenueAmount(int outboundId) {
         String sql = "SELECT distinct r.revenue_amount, o.outbound_amount " +
