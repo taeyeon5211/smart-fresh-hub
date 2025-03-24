@@ -45,3 +45,8 @@ select * from business_table;
 
 select * from outbound_table;
 delete from outbound_table where outbound_id = 12;
+
+SHOW PROCEDURE STATUS WHERE Db = 'wms_db';
+
+select * from revenue_table;
+select * from revenue_history_table;
