@@ -19,12 +19,11 @@ BEGIN
              JOIN business_table b ON p.business_id = b.business_id
         -- 관리자 테이블과 조인하여 담당 관리자 ID 가져오기
              JOIN admin_table a ON i.admin_id = a.admin_id
-    WHERE i.inbound_status = '대기'  -- "대기" 상태인 입고 요청만 조회
+    WHERE i.inbound_status = '대기' -- "대기" 상태인 입고 요청만 조회
     ORDER BY i.inbound_request_date DESC; -- 요청 날짜 기준으로 내림차순 정렬
 END $$
 
 DELIMITER ;
-
 
 
 DELIMITER $$
@@ -53,7 +52,6 @@ END $$
 DELIMITER ;
 
 
-
 DELIMITER $$
 
 CREATE PROCEDURE GetInboundHistoryByBusiness(IN p_businessId INT)
@@ -74,12 +72,11 @@ BEGIN
              JOIN business_table b ON p.business_id = b.business_id
         --  관리자 테이블과 조인하여 담당 관리자 ID 가져오기
              JOIN admin_table a ON i.admin_id = a.admin_id
-    WHERE p.business_id = p_businessId  --  특정 사업체의 입고 내역만 조회
+    WHERE p.business_id = p_businessId --  특정 사업체의 입고 내역만 조회
     ORDER BY i.inbound_request_date DESC; --  요청 날짜 기준으로 내림차순 정렬
 END $$
 
 DELIMITER ;
-
 
 
 DELIMITER $$
@@ -180,16 +177,16 @@ END $$
 delimiter ;
 
 -- 모든 회원 조회 프로시저
-delimiter $$
+drop procedure if exists FetchAllUsersPrc;
 
-CREATE PROCEDURE FindAllUsers()
+DELIMITER $$
+CREATE PROCEDURE FetchAllUsersPrc(
+)
 BEGIN
-    SELECT * -- 모든 컬럼을 반환할 필요가 있나?
-    FROM user_table;
+    SELECT *
+    from user_table;
 END $$
-
-delimiter ;
-
+DELIMITER ;
 
 -- 회원 업데이트 프로시저
 
@@ -214,7 +211,9 @@ BEGIN
     ELSEIF p_update_type = 5 THEN
         UPDATE user_table SET user_phone = p_new_value WHERE user_login_id = p_user_login_id;
     ELSEIF p_update_type = 6 THEN
-        UPDATE user_table SET user_birth_date = STR_TO_DATE(p_new_value, '%Y-%m-%d') WHERE user_login_id = p_user_login_id;
+        UPDATE user_table
+        SET user_birth_date = STR_TO_DATE(p_new_value, '%Y-%m-%d')
+        WHERE user_login_id = p_user_login_id;
     ELSEIF p_update_type = 7 THEN
         UPDATE user_table SET user_type = p_new_value WHERE user_login_id = p_user_login_id;
 

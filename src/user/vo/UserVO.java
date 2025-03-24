@@ -1,10 +1,8 @@
 package user.vo;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import user.dto.UserDTO;
-import user.vo.UserType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
