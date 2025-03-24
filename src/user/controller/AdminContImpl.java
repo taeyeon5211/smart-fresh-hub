@@ -47,9 +47,8 @@ public class AdminContImpl implements AdminCont {
         // 서비스를 호출하여 디비의 회원 객체 불러오기
         try {
             List<UserDTO> users = userService.fetchAllUsers();
-            for(UserDTO user : users) {
-                System.out.println(user);
-            }
+
+            users.forEach(user -> System.out.println(user));
             System.out.println("모든 회원 정보를 출력 완료하였습니다.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
