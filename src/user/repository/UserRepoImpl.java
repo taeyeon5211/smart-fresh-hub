@@ -2,6 +2,7 @@ package user.repository;
 
 import object.ObjectIo;
 import user.dto.BackupDto;
+import user.dto.UserDTO;
 import user.vo.UserVO;
 
 import java.sql.*;
@@ -95,11 +96,51 @@ public class UserRepoImpl implements UserRepo {
         }
     }
 
+    /**
+     * 데이터베이스의 모든 회원 객체를 반환하는 메서드
+     *
+     * @return
+     */
     @Override
-    public List<UserVO> findAllUsers() {
-        // 모든 회원을 조회하는 프로시저 부르기
-        return List.of();
+    public List<UserDTO> fetchAllUsers() {
+
+        String fetchAllUsersPrc = "{CALL FetchAllUsersPrc()}";
+
+
+        List<UserDTO> users = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            // connect to DB
+            cs = connection.prepareCall(fetchAllUsersPrc);
+            rs = cs.executeQuery(); // returns a rs object
+
+
+            while (rs.next()) {
+                UserDTO userDto = UserDTO.builder()
+                        .userId(rs.getInt("user_id"))
+                        .userLoginId(rs.getString("user_login_id"))
+                        .userName(rs.getString("user_name"))
+                        .userPassword(rs.getString("user_password"))
+                        .userAddress(rs.getString("user_address"))
+                        .userEmail(rs.getString("user_email"))
+                        .userPhone(rs.getString("user_phone"))
+                        .userBirthDate(rs.getDate("user_birth_date")
+                                .toLocalDate()).userCreatedAt(LocalDateTime.parse(rs.getString("user_created_at"), formatter))
+                        .build();
+
+                users.add(userDto); // 만들어진 객체를 리스트에 넣기
+
+            }
+
+            cs.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // exception 잡아서 메시지 출력
+        }
+
+        return users;
     }
+
 
     /**
      * 전달받은 회원 dto 객체를 디비에 저장한다

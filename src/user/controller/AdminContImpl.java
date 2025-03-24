@@ -4,8 +4,7 @@ import login.controller.LoginCont;
 import login.dto.LoginResDTO;
 import user.dto.UserDTO;
 import user.service.UserService;
-
-import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdminContImpl implements AdminCont {
@@ -27,16 +26,37 @@ public class AdminContImpl implements AdminCont {
         // 성공 메시지 추가하기
     }
 
+    /**
+     * 회원 한명의 로그인 아이디 입력 받은 후, 회원 정보를 출력하는 메서드
+     */
     @Override
     public void findUser() {
         String userLoginId = UserInputHelper.inputUserLoginId();
         try {
             userService.findUser(userLoginId);
+            System.out.println(userLoginId + "의 정보 출력하였습니다. 회원관리 메뉴로 돌아갑니다.");
         } catch (Exception e) {
-            System.out.println("해당 사용자 아이디를 찾을 수 없습니다. 뒤로 돌아갑니다. ");
+            System.out.println("해당 사용자 아이디를 찾을 수 없습니다. 회원관리 돌아갑니다. ");
 
         }
+        startAdminMenu();
     }
+
+    @Override
+    public void fetchAllUsers() {
+        // 서비스를 호출하여 디비의 회원 객체 불러오기
+        try {
+            List<UserDTO> users = userService.fetchAllUsers();
+
+            users.forEach(user -> System.out.println(user));
+            System.out.println("모든 회원 정보를 출력 완료하였습니다.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
+        startAdminMenu(); // 메인 메뉴로 뒤돌아가기
+    }
+
     @Override
     public void readMyAccount(LoginResDTO loginedUser) { //
         System.out.println(loginedUser);
@@ -55,6 +75,7 @@ public class AdminContImpl implements AdminCont {
         System.out.print("변경할 항목의 번호를 선택하세요: ");
 
         int choice = sc.nextInt();
+        sc.nextLine(); // 남아있는 개행 문자 처리
 
 
         UserDTO fetchedUser = userService.findUser(loginedUser.getUserLoginId());
@@ -66,10 +87,7 @@ public class AdminContImpl implements AdminCont {
 
     }
 
-    @Override
-    public void updateUser(){
-        String userLoginId = UserInputHelper.inputUserLoginId();
-
+    public void printAdminUpdateMenu() {
         System.out.println("===== 회원 정보 수정 메뉴 =====");
         System.out.println("1. 비밀번호 변경");
         System.out.println("2. 주소 변경");
@@ -79,18 +97,30 @@ public class AdminContImpl implements AdminCont {
         System.out.println("6. 생년월일 변경");
         System.out.println("7. 사용자 유형 변경");
         System.out.print("변경할 항목의 번호를 선택하세요: ");
+    }
 
-        int choice = sc.nextInt();
+    /**
+     * admin이 특정 회원의 정보를 수정하는 메서드
+     */
+    @Override
+    public void updateUser(){
+        String userLoginId = UserInputHelper.inputUserLoginId();
 
+       printAdminUpdateMenu(); // 수정할 서브메뉴 프린트
+
+        int choice = sc.nextInt(); // 선택값 받기
+        sc.nextLine(); // 남아있는 개행문자 처리
 
         try {
             UserDTO fetchedUser = userService.findUser(userLoginId);
-            userService.updateUser(fetchedUser, choice);
+            userService.updateUser(fetchedUser, choice); //
+            System.out.println("회원 정보 수정 완료하였습니다.");
+            System.out.println(fetchedUser); // 수정된 정보 보여주기
         } catch (Exception e) {
+            System.out.println("오류 입니다. 회원 관리 메뉴로 돌아갑니다.");
             throw new RuntimeException(e);
         }
-        startAdminMenu();
-
+        startAdminMenu(); // 다시 뒤로 돌아가기
     }
 
     @Override
@@ -128,7 +158,8 @@ public class AdminContImpl implements AdminCont {
         System.out.println(" 2. 회원 조회");
         System.out.println(" 3. 회원 수정");
         System.out.println(" 4. 회원 삭제");
-        System.out.println(" 5. 샥제된 회원 모두 조회");
+        System.out.println(" 5. 삭제된 모든 회원 조회");
+        System.out.println(" 6. 모든 회원 조회");
         System.out.println(" 0. 종료");
         System.out.println("-".repeat(30));
     }
@@ -141,6 +172,7 @@ public class AdminContImpl implements AdminCont {
                 case "3" -> updateUser();
                 case "4" -> deleteUser();
                 case "5" -> readClientBackUpTbl();
+                case "6" -> fetchAllUsers();
                 case "0" -> {
                     System.out.println("회원관리를 종료합니다.");
                 }

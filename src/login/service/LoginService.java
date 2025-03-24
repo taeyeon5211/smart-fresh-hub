@@ -1,6 +1,4 @@
 package login.service;
-
-import login.dto.LoginReqDTO;
 import login.dto.LoginResDTO;
 
 public interface LoginService {

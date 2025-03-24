@@ -13,7 +13,12 @@ public interface UserService {
    Boolean deleteUser(String userLoginId); //
    void updateUser(UserDTO userDTO, int choice);
    UserDTO findUser(String userLoginId);
+
+   /**
+    * 데이터베이스의 모든 회원 객체를 반환하는 메서드
+    * @return
+    */
+   List<UserDTO> fetchAllUsers();
     void createNewAccount();
-   List<UserDTO> findAllUsers();
    List<BackupDto> readClientBackUpTbl();
 }
