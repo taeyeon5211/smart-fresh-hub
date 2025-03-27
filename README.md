@@ -40,6 +40,6 @@ Smart Fresh Hub는 Java 기반의 물류 및 창고 관리 애플리케이션입
 
 ## 설치 및 실행 방법
 
-1. **프로젝트 클론**
+- **프로젝트 클론**
    ```bash
    git clone https://github.com/your-username/smart-fresh-hub-dev.git
