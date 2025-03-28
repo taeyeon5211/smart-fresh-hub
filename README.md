@@ -1,6 +1,7 @@
 # Smart Fresh Hub
 
 Smart Fresh Hub는 Java 기반의 물류 및 창고 관리 애플리케이션입니다. 이 프로젝트는 입고, 출고, 창고 관리, 사용자 인증 등 다양한 기능을 제공하며, 모듈화된 구조를 통해 유지보수와 확장이 용이하도록 설계되었습니다.
+Team Notion : [https://www.notion.so/CHILL-STOCK-1bd501101bba803c872efed3a280a7b9](https://www.notion.so/CHILL-STOCK-1bd501101bba803c872efed3a280a7b9)
 
 ## 프로젝트 구조
   ```plaintext
@@ -58,6 +59,7 @@ smart-fresh-hub-dev/
 
 - **sql/**
   - 데이터베이스 스키마, 테이블, 제약조건, 트리거, 데이터, 프로시저 등 초기화 및 관리 스크립트
+  - erd : [https://www.erdcloud.com/d/4N6KNTWyntqcYu4AL](https://www.erdcloud.com/d/4N6KNTWyntqcYu4AL)
 
 - **src/**
   - **Main.java**: 애플리케이션 진입점
