@@ -3,6 +3,54 @@
 Smart Fresh Hub는 Java 기반의 물류 및 창고 관리 애플리케이션입니다. 이 프로젝트는 입고, 출고, 창고 관리, 사용자 인증 등 다양한 기능을 제공하며, 모듈화된 구조를 통해 유지보수와 확장이 용이하도록 설계되었습니다.
 
 ## 프로젝트 구조
+  ```plaintext
+smart-fresh-hub-dev/
+└── smart-fresh-hub-dev/
+    ├── doc/                    # 개발 문서
+    ├── sql/                    # DB 스크립트
+    └── src/                    # 소스 코드 (패키지 구조)
+        ├── Main.java         # 애플리케이션 진입점 (default package)
+        ├── area              # 창고 구역 관리 관련 모듈
+        │   ├── common/       # 공통 코드 (유틸 등)
+        │   ├── controller/   # Area 관련 컨트롤러 패키지
+        │   ├── dto/          # Area 관련 데이터 전송 객체
+        │   ├── repository/   # Area 관련 데이터 접근 객체
+        │   ├── service/      # Area 관련 비즈니스 로직 처리
+        │   └── vo/           # Area 관련 값 객체
+        ├── auth                # 인증 관련 모듈 (단일 패키지)
+        ├── diconfig            # DI 설정 모듈
+        ├── inbound             # 입고 관리 관련 모듈
+        │   ├── controller/   # Inbound 관련 컨트롤러
+        │   ├── dto/          # Inbound 관련 데이터 전송 객체
+        │   ├── repository/   # Inbound 관련 데이터 접근 객체
+        │   ├── service/      # Inbound 관련 비즈니스 로직 처리
+        │   └── vo/           # Inbound 관련 값 객체
+        ├── login               # 로그인 관련 모듈
+        │   ├── controller/   # Login 관련 컨트롤러
+        │   ├── dto/          # Login 관련 데이터 전송 객체
+        │   ├── repository/   # Login 관련 데이터 접근 객체
+        │   └── service/      # Login 관련 서비스
+        ├── outbound            # 출고 관리 관련 모듈
+        │   ├── common/       # 공통 코드 (유틸 등)
+        │   ├── controller/   # Outbound 관련 컨트롤러
+        │   ├── dto/          # Outbound 관련 데이터 전송 객체
+        │   ├── repository/   # Outbound 관련 데이터 접근 객체
+        │   ├── service/      # Outbound 관련 비즈니스 로직 처리
+        │   └── vo/           # Outbound 관련 값 객체
+        ├── user                # 사용자 및 관리자 관련 모듈
+        │   ├── controller/   # User 관련 컨트롤러
+        │   ├── dto/          # User 관련 데이터 전송 객체
+        │   ├── repository/   # User 관련 데이터 접근 객체
+        │   ├── service/      # User 관련 비즈니스 로직 처리
+        │   └── vo/           # User 관련 값 객체
+        ├── view                # 뷰(View) 관련 모듈 (콘솔 기반 UI 등)
+        └── warehouse           # 창고 관리 관련 모듈
+            ├── common/       # 공통 코드 (유틸 등)
+            ├── controller/   # Warehouse 관련 컨트롤러
+            ├── dto/          # Warehouse 관련 데이터 전송 객체
+            ├── repository/   # Warehouse 관련 데이터 접근 객체
+            ├── service/      # Warehouse 관련 비즈니스 로직 처리
+            └── vo/           # Warehouse 관련 값 객체
 
 - **doc/**
   - `commit-convention.md`: 커밋 메시지 규칙 안내
