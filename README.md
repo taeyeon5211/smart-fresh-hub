@@ -79,6 +79,13 @@ smart-fresh-hub-dev/
   - `pull_request_template.md`: 풀 리퀘스트(PR) 템플릿
   - `smart-fresh-hub.iml`: IntelliJ IDEA 프로젝트 파일
 
+## 기술스택
+
+- **언어**: Java 11 이상
+- **아키텍처**: MVC 패턴, 의존성 주입(DI)
+- **데이터베이스**: MySQL
+- **빌드 도구**: (필요 시 Maven 또는 Gradle 도입 검토)
+
 ## 기능
 
 - **입고 관리**: 제품 입고 기록 관리 및 예외 처리
