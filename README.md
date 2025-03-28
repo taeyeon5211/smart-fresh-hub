@@ -51,6 +51,7 @@ smart-fresh-hub-dev/
             ├── repository/   # Warehouse 관련 데이터 접근 객체
             ├── service/      # Warehouse 관련 비즈니스 로직 처리
             └── vo/           # Warehouse 관련 값 객체
+```
 
 - **doc/**
   - `commit-convention.md`: 커밋 메시지 규칙 안내
